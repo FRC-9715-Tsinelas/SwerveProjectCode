@@ -15,7 +15,7 @@ public final class Constants {
         public static final IdleMode kRollerIdleMode = IdleMode.kCoast;
 
         // current limits (amps)
-        public static final int kPivotCurrentLimit = 40; 
+        public static final int kPivotCurrentLimit = 30; 
         public static final int kRollerCurrentLimit = 20;
 
         // PID
