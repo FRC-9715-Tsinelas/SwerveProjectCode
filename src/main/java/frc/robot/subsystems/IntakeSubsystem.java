@@ -1,0 +1,104 @@
+package frc.robot.subsystems;
+
+import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import com.revrobotics.spark.*;
+import com.revrobotics.spark.SparkClosedLoopController;
+import frc.robot.Constants.IntakeConstants;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.SparkAbsoluteEncoder;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.FeedbackSensor;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+
+import edu.wpi.first.math.util.Units;
+
+public class IntakeSubsystem extends SubsystemBase  {
+    
+    public enum IntakeState{
+        STOWED(IntakeConstants.kAngleStowed),
+        GROUND(IntakeConstants.kAngleGround);
+
+        public final double angleDegrees;
+
+        IntakeState(double angle) { this.angleDegrees = angle;}
+    }
+
+    private final SparkMax roller;
+    private final SparkMax pivot;
+
+    private final SparkAbsoluteEncoder pivotAbsoluteEncoder;
+    private final SparkClosedLoopController pivotController;
+
+    private final ArmFeedforward feedforward;
+    private IntakeState currentState = IntakeState.STOWED;
+
+    public IntakeSubsystem(){
+        roller = new SparkMax(IntakeConstants.ROLLER_ID, MotorType.kBrushless);
+        pivot = new SparkMax(IntakeConstants.PIVOT_ID, MotorType.kBrushless);
+
+        pivotAbsoluteEncoder = pivot.getAbsoluteEncoder();
+        pivotController = pivot.getClosedLoopController();
+
+        feedforward = new ArmFeedforward(
+            IntakeConstants.kS, 
+            IntakeConstants.kG,
+            IntakeConstants.kV 
+        );
+        // roller config
+        SparkMaxConfig rollerConfig = new SparkMaxConfig();
+        rollerConfig
+            .smartCurrentLimit(IntakeConstants.kRollerCurrentLimit)
+            .inverted(IntakeConstants.kRollerInverted);
+
+        roller.configure(rollerConfig, com.revrobotics.ResetMode.kResetSafeParameters, com.revrobotics.PersistMode.kPersistParameters);
+        
+        // pivot config
+        SparkMaxConfig pivotConfig = new SparkMaxConfig();
+
+        pivotConfig
+            .smartCurrentLimit(IntakeConstants.kPivotCurrentLimit)
+            .idleMode(IntakeConstants.kPivotIdleMode)
+            .inverted(IntakeConstants.kPivotInverted);
+
+        pivotConfig.absoluteEncoder
+            .positionConversionFactor(360.0)
+            .velocityConversionFactor(360.0 / 60.0)
+            .zeroOffset(IntakeConstants.kEncoderOffset);
+        
+        pivotConfig.closedLoop
+            .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
+            .p(IntakeConstants.kP)
+            .i(IntakeConstants.kI)
+            .d(IntakeConstants.kD)
+            .outputRange(IntakeConstants.kMinOutput, IntakeConstants.kMaxOutput);
+        
+        pivot.configure(pivotConfig, com.revrobotics.ResetMode.kResetSafeParameters, com.revrobotics.PersistMode.kPersistParameters);
+    }
+
+    public void setIntakeState(IntakeState state) {
+        this.currentState = state;
+    }
+
+    public void setRoller(double speed) {
+        roller.set(speed);
+    }
+
+    @Override
+    public void periodic() {
+        double currentAngleRad = Units.degreesToRadians(pivotAbsoluteEncoder.getPosition());
+        double ffVoltage = feedforward.calculate(currentAngleRad, 0);
+
+        double targetAngle = Math.min(Math.max(currentState.angleDegrees, IntakeConstants.kMinAngle), IntakeConstants.kMaxAngle);
+        pivotController.setSetpoint(
+            targetAngle, 
+            SparkMax.ControlType.kPosition,
+            com.revrobotics.spark.ClosedLoopSlot.kSlot0,
+            ffVoltage
+        );
+    }
+
+}

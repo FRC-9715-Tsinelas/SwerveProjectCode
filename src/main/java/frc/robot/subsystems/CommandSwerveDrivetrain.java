@@ -7,6 +7,7 @@ import java.util.function.Supplier;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -25,6 +26,10 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
+
+// added imports for manual code modification
+import frc.robot.generated.TunerConstants;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -127,6 +132,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         SwerveModuleConstants<?, ?, ?>... modules
     ) {
         super(drivetrainConstants, modules);
+        brokenModuleConfig();
         if (Utils.isSimulation()) {
             startSimThread();
         }
@@ -151,6 +157,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         SwerveModuleConstants<?, ?, ?>... modules
     ) {
         super(drivetrainConstants, odometryUpdateFrequency, modules);
+        brokenModuleConfig();
         if (Utils.isSimulation()) {
             startSimThread();
         }
@@ -182,7 +189,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         Matrix<N3, N1> visionStandardDeviation,
         SwerveModuleConstants<?, ?, ?>... modules
     ) {
+        
         super(drivetrainConstants, odometryUpdateFrequency, odometryStandardDeviation, visionStandardDeviation, modules);
+        brokenModuleConfig();
         if (Utils.isSimulation()) {
             startSimThread();
         }
@@ -299,5 +308,30 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     @Override
     public Optional<Pose2d> samplePoseAt(double timestampSeconds) {
         return super.samplePoseAt(Utils.fpgaToCurrentTime(timestampSeconds));
+    }
+    // index of front left: 0, index of front right:1
+    private void brokenModuleConfig() {
+        int[] brokenModules = {0, 1};
+
+        for (int index : brokenModules) {
+            var steerMotor = this.getModule(index).getSteerMotor();
+            FeedbackConfigs brokenConfigs = new FeedbackConfigs();
+
+            // refresh -> commented because it may not be needed
+            // steerMotor.getConfigurator().refresh(brokenConfigs);
+
+            // switch to proper sensor
+            brokenConfigs.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
+
+            // gear ratio
+            brokenConfigs.SensorToMechanismRatio = TunerConstants.kSteerGearRatio;
+
+            // apply settings
+            steerMotor.getConfigurator().apply(brokenConfigs);
+
+            // zero position
+            steerMotor.setPosition(0);
+
+        }
     }
 }
