@@ -22,8 +22,8 @@ public class ShooterSubsystem {
      * 
      */
 
-    private final SparkMax leader = new SparkMax(3, MotorType.kBrushless);
-    private final SparkMax follower = new SparkMax(6, MotorType.kBrushless);
+    private final SparkMax leader = new SparkMax(10, MotorType.kBrushless); // CHANGE to correct
+    private final SparkMax follower = new SparkMax(3, MotorType.kBrushless); // CHANGE to correct
 
     private double currentPower = 0.0;
 

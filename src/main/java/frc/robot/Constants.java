@@ -43,4 +43,11 @@ public final class Constants {
         public static final double kMinAngle = 0.0;
         public static final double kMaxAngle = 90.0;
     }
+    public static final class IndexerConstants {
+        public static final int INDEXER_MOTOR_ID = 0; // change to correct port
+
+        public static final boolean kIndexerInverted = false;
+
+        public static final int kIndexerCurrentLimit = 25;
+    }
 }
