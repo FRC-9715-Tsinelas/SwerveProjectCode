@@ -97,6 +97,19 @@ public class RobotContainer {
 
     }
 
+    //b button for auto align
+        joystick.b().whileTrue(
+            new RunCommand(() -> 
+                m_drivetrain.autoaim(
+                    true, 
+                    () -> -joystick.getLeftY(), 
+                    () -> -joystick.getLeftX()
+                ), 
+                m_drivetrain
+            )
+        );
+
+
     public Command getAutonomousCommand() {
         // Simple drive forward auton
         final var idle = new SwerveRequest.Idle();
