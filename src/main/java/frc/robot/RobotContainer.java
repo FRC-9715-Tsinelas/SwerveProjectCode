@@ -65,8 +65,9 @@ public class RobotContainer {
         RobotModeTriggers.disabled().whileTrue(
             drivetrain.applyRequest(() -> idle).ignoringDisable(true)
         );
-
+        // pressing a brakes drivetrain like stop moving
         joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
+        // it looks like pressing b points all the modules to wherever the left joystick is facing
         joystick.b().whileTrue(drivetrain.applyRequest(() ->
             point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
         ));
@@ -84,16 +85,23 @@ public class RobotContainer {
         drivetrain.registerTelemetry(logger::telemeterize);
 
 
-        // y button
-        joystick.y().onTrue(
+        // up arrow key thing
+        joystick.povUp().onTrue(
             new InstantCommand(() -> {
-                double newPower = m_Shooter.getCurrentPower() + 0.1;
+                double newPower = m_Shooter.getCurrentPower() + 0.05;
                 m_Shooter.setShooterPower(newPower);
             }));
-        // x button to cut power
-        joystick.x().onTrue(new InstantCommand(() -> {
-            m_Shooter.stop();
-        }));
+        // down arrow key
+        joystick.povDown().onTrue(
+            new InstantCommand(() -> {
+                double newPower = m_Shooter.getCurrentPower() - 0.05;
+                m_Shooter.setShooterPower(newPower);
+            }));
+        // left arrow key to stop
+        joystick.povLeft().onTrue(
+            new InstantCommand(() -> {
+                m_Shooter.stop();
+            }));    
 
     }
 
