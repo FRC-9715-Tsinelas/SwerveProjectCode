@@ -72,9 +72,9 @@ public class RobotContainer {
         // pressing a brakes drivetrain like stop moving
         joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
         // it looks like pressing b points all the modules to wherever the left joystick is facing
-        joystick.b().whileTrue(drivetrain.applyRequest(() ->
-            point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
-        ));
+        // joystick.b().whileTrue(drivetrain.applyRequest(() ->
+        //     point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
+        // ));
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
@@ -109,7 +109,7 @@ public class RobotContainer {
         // INTAKE commands -> Uncomment when tuned -> also set correct ids too
         //joystick.rightBumper().whileTrue(m_Intake.runIntakeCommand());
 
-        // INDEXER commands
+        // INDEXER commands -> also uncommented the original B command (look above)
         //joystick.b().onTrue(m_Indexer.toggleIndexer(0.5));
 
     }
