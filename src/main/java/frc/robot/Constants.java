@@ -15,7 +15,7 @@ public final class Constants {
         public static final IdleMode kRollerIdleMode = IdleMode.kCoast;
 
         // current limits (amps)
-        public static final int kPivotCurrentLimit = 40; // Adjust if needed
+        public static final int kPivotCurrentLimit = 30; // Adjust if needed
         public static final int kRollerCurrentLimit = 20;
 
         // PID
@@ -49,5 +49,15 @@ public final class Constants {
         public static final boolean kIndexerInverted = false;
 
         public static final int kIndexerCurrentLimit = 25;
+    }
+    public static final class ShooterConstants {
+
+        public static final int MOTOR_LEADER_ID = 10;
+        public static final int MOTOR_FOLLOWER_ID = 3;
+        public static final int SMALL_MOTOR_ID = 21;
+
+        // current limits
+        public static final int kLargeMotorCurrentLimit = 35;
+        public static final int kSmallMotorCurrentLimit = 20;
     }
 }

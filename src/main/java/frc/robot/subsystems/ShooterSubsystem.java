@@ -6,6 +6,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ShooterConstants;
 
 public class ShooterSubsystem extends SubsystemBase {
     // one motor reverse of the other
@@ -42,7 +43,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
         baseConfig
             .idleMode(IdleMode.kCoast)
-            .smartCurrentLimit(50);
+            .smartCurrentLimit(ShooterConstants.kLargeMotorCurrentLimit);
 
         /*
          * motorLeader.configure(baseConfig, com.revrobotics.ResetMode.kResetSafeParameters, com.revrobotics.PersistMode.kPersistParameters);
@@ -51,7 +52,9 @@ public class ShooterSubsystem extends SubsystemBase {
          *   .follow(motorLeader, false);
          * motorFollower.configure(motorFollowerConfig, com.revrobotics.ResetMode.kResetSafeParameters, com.revrobotics.PersistMode.kPersistParameters);
          * 
-         * smallRollerConfig.apply(baseConfig);
+         * smallRollerConfig
+         *    .idleMode(IdleMode.kCoast)
+         *    .smartCurrentLimit(ShooterConstants.kSmallMotorCurrentLimit)
          * smallRoller.configure(baseConfig, com.revrobotics.ResetMode.kResetSafeParameters, com.revrobotics.PersistMode.kPersistParameters);
          * 
          */
@@ -67,6 +70,7 @@ public class ShooterSubsystem extends SubsystemBase {
         currentPower = Math.max(0.0, Math.min(1.0, power));
         leader.set(currentPower);
         // motorLeader.set(currentPower);
+        // smallRoller.set(currentPower);
     }
 
     public double getCurrentPower() {
