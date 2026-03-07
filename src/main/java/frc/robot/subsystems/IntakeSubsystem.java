@@ -81,8 +81,12 @@ public class IntakeSubsystem extends SubsystemBase  {
         this.currentState = state;
     }
 
-    public void setRoller(double speed) {
+    public void setRollerSpeed(double speed) {
         roller.set(speed);
+    }
+
+    public void stop() {
+        roller.set(0);
     }
 
     @Override
@@ -96,6 +100,13 @@ public class IntakeSubsystem extends SubsystemBase  {
             SparkMax.ControlType.kPosition,
             com.revrobotics.spark.ClosedLoopSlot.kSlot0,
             ffVoltage
+        );
+    }
+
+    public Command runIntakeCommand() {
+        return this.startEnd(
+            () -> this.setRollerSpeed(0.4),
+            () -> this.stop()
         );
     }
 
