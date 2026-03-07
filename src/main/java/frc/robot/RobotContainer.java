@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
@@ -28,6 +29,7 @@ public class RobotContainer {
     // declare subsyste,s
     private final ShooterSubsystem m_Shooter = new ShooterSubsystem();
     private final IntakeSubsystem m_Intake = new IntakeSubsystem();
+    private final IndexerSubsystem m_Indexer = new IndexerSubsystem();
 
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
@@ -104,8 +106,11 @@ public class RobotContainer {
             new InstantCommand(() -> {
                 m_Shooter.stop();
             }));
-        // INTAKE commands
-        joystick.rightBumper().whileTrue(m_Intake.runIntakeCommand());
+        // INTAKE commands -> Uncomment when tuned -> also set correct ids too
+        //joystick.rightBumper().whileTrue(m_Intake.runIntakeCommand());
+
+        // INDEXER commands
+        //joystick.b().onTrue(m_Indexer.toggleIndexer(0.5));
 
     }
 
