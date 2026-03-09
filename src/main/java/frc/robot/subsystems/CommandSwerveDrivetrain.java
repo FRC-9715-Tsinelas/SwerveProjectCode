@@ -311,7 +311,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
     // index of front left: 0, index of front right:1
     private void brokenModuleConfig() {
-        int[] brokenModules = {0, 1};
+        int[] brokenModules = {0, 1, 2, 3};
 
         for (int index : brokenModules) {
             var steerMotor = this.getModule(index).getSteerMotor();

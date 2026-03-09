@@ -92,18 +92,23 @@ public class RobotContainer {
         // up arrow key thing
         joystick.povUp().onTrue(
             new InstantCommand(() -> {
+                System.out.println("up 1");
                 double newPower = m_Shooter.getCurrentPower() + 0.05;
+                System.out.println("up 2");
                 m_Shooter.setShooterPower(newPower);
             }));
         // down arrow key
         joystick.povDown().onTrue(
             new InstantCommand(() -> {
+                System.out.println("down 1");
                 double newPower = m_Shooter.getCurrentPower() - 0.05;
                 m_Shooter.setShooterPower(newPower);
+                System.out.println("down 2");
             }));
         // left arrow key to stop
         joystick.povLeft().onTrue(
             new InstantCommand(() -> {
+                System.out.println("left pressed");
                 m_Shooter.stop();
             }));
         // INTAKE commands -> Uncomment when tuned -> also set correct ids too

@@ -25,89 +25,89 @@ public class IntakeSubsystem extends SubsystemBase  {
         IntakeState(double angle) { this.angleDegrees = angle;}
     }
 
-    private final SparkMax roller;
-    private final SparkMax pivot;
+    // private final SparkMax roller;
+    // private final SparkMax pivot;
 
-    private final SparkAbsoluteEncoder pivotAbsoluteEncoder;
-    private final SparkClosedLoopController pivotController;
+    // private final SparkAbsoluteEncoder pivotAbsoluteEncoder;
+    // private final SparkClosedLoopController pivotController;
 
-    private final ArmFeedforward feedforward;
-    private IntakeState currentState = IntakeState.STOWED;
+    // private final ArmFeedforward feedforward;
+    // private IntakeState currentState = IntakeState.STOWED;
 
-    public IntakeSubsystem(){
-        roller = new SparkMax(IntakeConstants.ROLLER_ID, MotorType.kBrushless);
-        pivot = new SparkMax(IntakeConstants.PIVOT_ID, MotorType.kBrushless);
+    // public IntakeSubsystem(){
+    //     roller = new SparkMax(IntakeConstants.ROLLER_ID, MotorType.kBrushless);
+    //     pivot = new SparkMax(IntakeConstants.PIVOT_ID, MotorType.kBrushless);
 
-        pivotAbsoluteEncoder = pivot.getAbsoluteEncoder();
-        pivotController = pivot.getClosedLoopController();
+    //     pivotAbsoluteEncoder = pivot.getAbsoluteEncoder();
+    //     pivotController = pivot.getClosedLoopController();
 
-        feedforward = new ArmFeedforward(
-            IntakeConstants.kS, 
-            IntakeConstants.kG,
-            IntakeConstants.kV 
-        );
-        // roller config
-        SparkMaxConfig rollerConfig = new SparkMaxConfig();
-        rollerConfig
-            .smartCurrentLimit(IntakeConstants.kRollerCurrentLimit)
-            .inverted(IntakeConstants.kRollerInverted);
+    //     feedforward = new ArmFeedforward(
+    //         IntakeConstants.kS, 
+    //         IntakeConstants.kG,
+    //         IntakeConstants.kV 
+    //     );
+    //     // roller config
+    //     SparkMaxConfig rollerConfig = new SparkMaxConfig();
+    //     rollerConfig
+    //         .smartCurrentLimit(IntakeConstants.kRollerCurrentLimit)
+    //         .inverted(IntakeConstants.kRollerInverted);
 
-        roller.configure(rollerConfig, com.revrobotics.ResetMode.kResetSafeParameters, com.revrobotics.PersistMode.kPersistParameters);
+    //     roller.configure(rollerConfig, com.revrobotics.ResetMode.kResetSafeParameters, com.revrobotics.PersistMode.kPersistParameters);
         
-        // pivot config
-        SparkMaxConfig pivotConfig = new SparkMaxConfig();
+    //     // pivot config
+    //     SparkMaxConfig pivotConfig = new SparkMaxConfig();
 
-        pivotConfig
-            .smartCurrentLimit(IntakeConstants.kPivotCurrentLimit)
-            .idleMode(IntakeConstants.kPivotIdleMode)
-            .inverted(IntakeConstants.kPivotInverted);
+    //     pivotConfig
+    //         .smartCurrentLimit(IntakeConstants.kPivotCurrentLimit)
+    //         .idleMode(IntakeConstants.kPivotIdleMode)
+    //         .inverted(IntakeConstants.kPivotInverted);
 
-        pivotConfig.absoluteEncoder
-            .positionConversionFactor(360.0)
-            .velocityConversionFactor(360.0 / 60.0)
-            .zeroOffset(IntakeConstants.kEncoderOffset);
+    //     pivotConfig.absoluteEncoder
+    //         .positionConversionFactor(360.0)
+    //         .velocityConversionFactor(360.0 / 60.0)
+    //         .zeroOffset(IntakeConstants.kEncoderOffset);
         
-        pivotConfig.closedLoop
-            .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-            .p(IntakeConstants.kP)
-            .i(IntakeConstants.kI)
-            .d(IntakeConstants.kD)
-            .outputRange(IntakeConstants.kMinOutput, IntakeConstants.kMaxOutput);
+    //     pivotConfig.closedLoop
+    //         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
+    //         .p(IntakeConstants.kP)
+    //         .i(IntakeConstants.kI)
+    //         .d(IntakeConstants.kD)
+    //         .outputRange(IntakeConstants.kMinOutput, IntakeConstants.kMaxOutput);
         
-        pivot.configure(pivotConfig, com.revrobotics.ResetMode.kResetSafeParameters, com.revrobotics.PersistMode.kPersistParameters);
-    }
+    //     pivot.configure(pivotConfig, com.revrobotics.ResetMode.kResetSafeParameters, com.revrobotics.PersistMode.kPersistParameters);
+    // }
 
-    public void setIntakeState(IntakeState state) {
-        this.currentState = state;
-    }
+    // public void setIntakeState(IntakeState state) {
+    //     this.currentState = state;
+    // }
 
-    public void setRollerSpeed(double speed) {
-        roller.set(speed);
-    }
+    // public void setRollerSpeed(double speed) {
+    //     roller.set(speed);
+    // }
 
-    public void stop() {
-        roller.set(0);
-    }
+    // public void stop() {
+    //     roller.set(0);
+    // }
 
-    @Override
-    public void periodic() {
-        double currentAngleRad = Units.degreesToRadians(pivotAbsoluteEncoder.getPosition());
-        double ffVoltage = feedforward.calculate(currentAngleRad, 0);
+    // @Override
+    // public void periodic() {
+    //     double currentAngleRad = Units.degreesToRadians(pivotAbsoluteEncoder.getPosition());
+    //     double ffVoltage = feedforward.calculate(currentAngleRad, 0);
 
-        double targetAngle = Math.min(Math.max(currentState.angleDegrees, IntakeConstants.kMinAngle), IntakeConstants.kMaxAngle);
-        pivotController.setSetpoint(
-            targetAngle, 
-            SparkMax.ControlType.kPosition,
-            com.revrobotics.spark.ClosedLoopSlot.kSlot0,
-            ffVoltage
-        );
-    }
+    //     double targetAngle = Math.min(Math.max(currentState.angleDegrees, IntakeConstants.kMinAngle), IntakeConstants.kMaxAngle);
+    //     pivotController.setSetpoint(
+    //         targetAngle, 
+    //         SparkMax.ControlType.kPosition,
+    //         com.revrobotics.spark.ClosedLoopSlot.kSlot0,
+    //         ffVoltage
+    //     );
+    // }
 
-    public Command runIntakeCommand() {
-        return this.startEnd(
-            () -> this.setRollerSpeed(0.4),
-            () -> this.stop()
-        );
-    }
+    // public Command runIntakeCommand() {
+    //     return this.startEnd(
+    //         () -> this.setRollerSpeed(0.2),
+    //         () -> this.stop()
+    //     );
+    // }
 
 }
