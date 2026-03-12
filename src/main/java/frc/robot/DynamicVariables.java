@@ -2,6 +2,6 @@ package frc.robot;
 
 public class DynamicVariables {
     public class AutoAlignVariables{
-      public int kDistanceFromHub = 0
+        public int kDistanceFromHub = 0;
     }
 }
