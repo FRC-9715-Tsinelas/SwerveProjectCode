@@ -15,7 +15,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.botaimConstants;
-import frc.robot.DynamicVariables.;
+import frc.robot.DynamicVariables;
 
 public void autoaim(DoubleSupplier xSup, DoubleSupplier ySup) {
     Pose2d currentPose = m_drivetrain.getState().Pose;
