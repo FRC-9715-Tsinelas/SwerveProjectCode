@@ -1,11 +1,13 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.revrobotics.spark.config.SparkMaxConfig;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IndexerConstants;
 
 public class IndexerSubsystem extends SubsystemBase {
@@ -58,7 +60,7 @@ public class IndexerSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // SmartDashboard.putBoolean("Indexer Running", isRunning);
-        // SmartDashboard.putNumber("Indexer Output", indexerMotor.getAppliedOutput());
+        SmartDashboard.putBoolean("Indexer Running", isRunning);
+        SmartDashboard.putNumber("Indexer Output", indexerMotor.getAppliedOutput());
     }
 }

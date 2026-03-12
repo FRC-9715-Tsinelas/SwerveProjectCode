@@ -13,6 +13,7 @@ import com.revrobotics.spark.FeedbackSensor;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class IntakeSubsystem extends SubsystemBase  {
     
@@ -88,9 +89,12 @@ public class IntakeSubsystem extends SubsystemBase  {
     public void stop() {
         roller.set(0);
     }
-
+    
     @Override
     public void periodic() {
+        double currentAngle = pivotAbsoluteEncoder.getPosition();
+        SmartDashboard.putNumber("Intake Arm Angle", currentAngle);
+
         double currentAngleRad = Units.degreesToRadians(pivotAbsoluteEncoder.getPosition());
         double ffVoltage = feedforward.calculate(currentAngleRad, 0);
 
