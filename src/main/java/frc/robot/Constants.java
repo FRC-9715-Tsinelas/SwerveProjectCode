@@ -53,6 +53,7 @@ public final class Constants {
     public static final class botaimConstants {
         public static final double kHubPoseX = 0; // need change
         public static final double kHubPoseY = 0; // need change
-         = 
+        public static final double kMagicFunctionA = 0; // need to tune
+        public static final double kMagicFunctionB - 0;
     }
 }
