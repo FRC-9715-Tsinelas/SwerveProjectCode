@@ -57,11 +57,12 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic(){
-        SmartDashboard.putNumber("Shooter/power", currentPower);
-        SmartDashboard.putNumber("Shooter/RPM", motorLeader.getEncoder().getVelocity());
-        SmartDashboard.putNumber("Shooter/Current", motorLeader.getOutputCurrent());
-        SmartDashboard.putNumber("Shooter/Small motor temp", smallRoller.getMotorTemperature());
-        SmartDashboard.putNumber("Shooter/large motor temp", motorLeader.getMotorTemperature());
+        System.out.println("Checking");
+        SmartDashboard.putNumber("Shooter power", currentPower);
+        SmartDashboard.putNumber("Shooter RPM", motorLeader.getEncoder().getVelocity());
+        SmartDashboard.putNumber("Shooter Current", motorLeader.getOutputCurrent());
+        SmartDashboard.putNumber("Shooter Small motor temp", smallRoller.getMotorTemperature());
+        SmartDashboard.putNumber("Shooter large motor temp", motorLeader.getMotorTemperature());
     }
 
 }

@@ -10,51 +10,51 @@ import frc.robot.Constants.IndexerConstants;
 
 public class IndexerSubsystem extends SubsystemBase {
 
-    // private final SparkMax indexerMotor;
-    // private final SparkMaxConfig indexerConfig;
+    private final SparkMax indexerMotor;
+    private final SparkMaxConfig indexerConfig;
 
-    // private boolean isRunning = false;
+    private boolean isRunning = false;
 
-    // public IndexerSubsystem() {
+    public IndexerSubsystem() {
         // changed brushless to brushed
-    //     indexerMotor = new SparkMax(IndexerConstants.INDEXER_MOTOR_ID, MotorType.kBrushed);
-    //     indexerConfig = new SparkMaxConfig();
+        indexerMotor = new SparkMax(IndexerConstants.INDEXER_MOTOR_ID, MotorType.kBrushed);
+        indexerConfig = new SparkMaxConfig();
 
-    //     indexerConfig
-    //         .idleMode(IdleMode.kBrake)
-    //         .inverted(IndexerConstants.kIndexerInverted)
-    //         .smartCurrentLimit(IndexerConstants.kIndexerCurrentLimit);
+        indexerConfig
+            .idleMode(IdleMode.kBrake)
+            .inverted(IndexerConstants.kIndexerInverted)
+            .smartCurrentLimit(IndexerConstants.kIndexerCurrentLimit);
 
-    //     indexerMotor.configure(
-    //         indexerConfig,
-    //         com.revrobotics.ResetMode.kResetSafeParameters,
-    //         com.revrobotics.PersistMode.kPersistParameters
-    //     );
-    // }
+        indexerMotor.configure(
+            indexerConfig,
+            com.revrobotics.ResetMode.kResetSafeParameters,
+            com.revrobotics.PersistMode.kPersistParameters
+        );
+    }
 
-    // public void runIndexer(double speed) {
-    //     indexerMotor.set(speed);
-    //     isRunning = true;
-    // }
+    public void runIndexer(double speed) {
+        indexerMotor.set(speed);
+        isRunning = true;
+    }
 
-    // public void stopIndexer() {
-    //     indexerMotor.set(0);
-    //     isRunning = false;
-    // }
+    public void stopIndexer() {
+        indexerMotor.set(0);
+        isRunning = false;
+    }
 
-    // public boolean isRunning() {
-    //     return isRunning;
-    // }
+    public boolean isRunning() {
+        return isRunning;
+    }
 
-    // public Command toggleIndexer(double speed) {
-    //     return runOnce(() -> {
-    //         if (isRunning) {
-    //             stopIndexer();
-    //         } else {
-    //             runIndexer(speed);
-    //         }
-    //     });
-    // }
+    public Command toggleIndexer(double speed) {
+        return runOnce(() -> {
+            if (isRunning) {
+                stopIndexer();
+            } else {
+                runIndexer(speed);
+            }
+        });
+    }
 
     @Override
     public void periodic() {
@@ -62,41 +62,3 @@ public class IndexerSubsystem extends SubsystemBase {
         // SmartDashboard.putNumber("Indexer Output", indexerMotor.getAppliedOutput());
     }
 }
-
-//public class IndexerSubsystem extends SubsystemBase {
-    // private final SparkMax indexer = new SparkMax(IndexerConstants.INDEXER_MOTOR_ID, MotorType.kBrushless);
-    // private final SparkMaxConfig indexerConfig = new SparkMaxConfig();
-
-    // private boolean indexerRunning = false;
-
-    // public IndexerSubsystem() {
-
-    //     indexerConfig
-    //         .idleMode(IdleMode.kBrake) 
-    //         .inverted(IndexerConstants.kIndexerInverted)
-    //         .smartCurrentLimit(IndexerConstants.kIndexerCurrentLimit);
-
-    //     indexer.configure(indexerConfig, com.revrobotics.ResetMode.kResetSafeParameters, com.revrobotics.PersistMode.kPersistParameters);
-    // }
-
-    // public void runIndexer(double speed) {
-    //     indexer.set(speed);
-    //     indexerRunning = true;
-    // }
-
-    // public void stopIndexer() {
-    //     indexer.set(0);
-    //     indexerRunning = false;
-    // }
-
-    // public Command toggleIndexer(double speed) {
-    //     return runOnce(() -> {
-    //         if (indexerRunning) {
-    //             stopIndexer();
-    //         } else {
-    //             runIndexer(speed);
-    //         }
-    //     });
-    // }
-//} 
-
