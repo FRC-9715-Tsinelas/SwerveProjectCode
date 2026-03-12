@@ -14,7 +14,8 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.botaimConstants;
+import frc.robot.DynamicVariables.botaimConstants;
 
 public void autoaim(DoubleSupplier xSup, DoubleSupplier ySup) {
     Pose2d currentPose = m_drivetrain.getState().Pose;
@@ -22,6 +23,8 @@ public void autoaim(DoubleSupplier xSup, DoubleSupplier ySup) {
     double deltaX = botaimConstants.kHubPoseX - currentPose.getX();
     double deltaY = botaimConstants.kHubPoseY - currentPose.getY();
     double targetAngle = Math.toDegrees(Math.atan2(deltaY, deltaX));
+    double DistanceFromHob = Math.hypot(deltaX, deltaY);
+    AutoAlignVariables.kDistanceFromHub = DistanceFromHob;
 
     m_drivetrain.setControl(
         new SwerveRequest.FieldCentricFacingAngle()
