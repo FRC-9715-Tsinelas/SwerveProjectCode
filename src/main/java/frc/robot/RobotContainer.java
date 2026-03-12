@@ -108,6 +108,13 @@ public class RobotContainer {
                 m_drivetrain
             )
         );
+        
+        //b and y for autoshoot
+        joystick.y().and(joystick.b).onTrue(
+            new InstantCommand(() -> {
+                m_Shooter.Autopower();
+        }));
+                
 
 
     public Command getAutonomousCommand() {
