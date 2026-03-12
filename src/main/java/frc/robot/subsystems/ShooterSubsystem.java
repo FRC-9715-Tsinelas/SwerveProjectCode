@@ -57,7 +57,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic(){
-        System.out.println("Checking");
         SmartDashboard.putNumber("Shooter power", currentPower);
         SmartDashboard.putNumber("Shooter RPM", motorLeader.getEncoder().getVelocity());
         SmartDashboard.putNumber("Shooter Current", motorLeader.getOutputCurrent());
