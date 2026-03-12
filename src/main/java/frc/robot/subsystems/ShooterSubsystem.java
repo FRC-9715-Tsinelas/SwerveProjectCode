@@ -6,6 +6,8 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.SpecialFunction;
+import frc.robot.DynamicVariables.AutoAlignVariables;
 
 public class ShooterSubsystem extends SubsystemBase {
     // one motor reverse of the other
@@ -75,6 +77,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public void stop() {
         setShooterPower(0.0);
+    }
+
+    public void Autopower() {
+        setShooterPower(SpecialFunction.MagicFunction(AutoAlignVariables.kDistanceFromHub))
     }
 
     @Override
