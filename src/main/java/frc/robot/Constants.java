@@ -50,4 +50,9 @@ public final class Constants {
 
         public static final int kIndexerCurrentLimit = 25;
     }
+    public static final class botaimConstants {
+        public static final double kHubPoseX = 0; // need change
+        public static final double kHubPoseY = 0; // need change
+         = 
+    }
 }
