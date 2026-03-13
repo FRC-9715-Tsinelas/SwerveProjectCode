@@ -117,7 +117,7 @@ public class RobotContainer {
         //joystick.rightBumper().whileTrue(m_Intake.runIntakeCommand());
 
         // INDEXER commands -> also uncommented the original B command (look above)
-        //joystick.b().onTrue(m_Indexer.toggleIndexer(0.5));
+        //joystick.x().onTrue(m_Indexer.toggleIndexer(0.5));
 
     }
 
