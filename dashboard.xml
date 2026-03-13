@@ -1,19 +1,38 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="Large Motor" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="74" y="64"/>
+		<width>218</width>
+		<height>34</height>
+	</widget>
+	<widget field="Small Motor" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="71" y="105"/>
+		<width>220</width>
+		<height>34</height>
+	</widget>
 	<widget field="Shooter large motor temp" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="318"/>
+		<location x="72" y="335"/>
+		<width>217</width>
 	</widget>
 	<widget field="Shooter Small motor temp" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="297"/>
+		<location x="75" y="302"/>
+		<width>214</width>
+		<height>22</height>
 	</widget>
 	<widget field="Shooter Current" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="276"/>
+		<location x="79" y="270"/>
+		<width>210</width>
+		<height>25</height>
 	</widget>
 	<widget field="Shooter RPM" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="255"/>
+		<location x="91" y="229"/>
+		<width>197</width>
+		<height>35</height>
 	</widget>
 	<widget field="Shooter power" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="234"/>
+		<location x="81" y="190"/>
+		<width>209</width>
+		<height>32</height>
 	</widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
 		<location x="0" y="0"/>

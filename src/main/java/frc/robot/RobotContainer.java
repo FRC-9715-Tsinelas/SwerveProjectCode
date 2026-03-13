@@ -93,17 +93,19 @@ public class RobotContainer {
         joystick.povUp().onTrue(
             new InstantCommand(() -> {
                 System.out.println("up 1");
-                double newPower = m_Shooter.getCurrentPower() + 0.05;
+                double nextLarge = m_Shooter.getLargePower() + 0.05;
+                double nextSmall = m_Shooter.getSmallPower() + 0.05;
                 System.out.println("up 2");
-                m_Shooter.setShooterPower(newPower);
+                m_Shooter.setShooterPower(nextLarge, nextSmall); 
             }));
         // down arrow key
         joystick.povDown().onTrue(
             new InstantCommand(() -> {
                 System.out.println("down 1");
-                double newPower = m_Shooter.getCurrentPower() - 0.05;
-                m_Shooter.setShooterPower(newPower);
+                double nextLarge = m_Shooter.getLargePower() - 0.05;
+                double nextSmall = m_Shooter.getSmallPower() - 0.05;
                 System.out.println("down 2");
+                m_Shooter.setShooterPower(nextLarge, nextSmall); 
             }));
         // left arrow key to stop
         joystick.povLeft().onTrue(
