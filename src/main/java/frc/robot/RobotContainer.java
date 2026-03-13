@@ -26,7 +26,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class RobotContainer {
-    // declare subsyste,s
+    // Subsystems Declaration
     private final ShooterSubsystem m_Shooter = new ShooterSubsystem();
     // private final IntakeSubsystem m_Intake = new IntakeSubsystem();
     // private final IndexerSubsystem m_Indexer = new IndexerSubsystem();
@@ -89,7 +89,7 @@ public class RobotContainer {
         drivetrain.registerTelemetry(logger::telemeterize);
 
         // SHOOTER commands
-        // up arrow key thing
+        // Up Key: Increase motor powers by 0.05 | Change when it's tuned
         joystick.povUp().onTrue(
             new InstantCommand(() -> {
                 System.out.println("up 1");
@@ -98,7 +98,7 @@ public class RobotContainer {
                 System.out.println("up 2");
                 m_Shooter.setShooterPower(nextLarge, nextSmall); 
             }));
-        // down arrow key
+        // Down Key: Decrease motor powers by 0.05 | Change when it's tuned
         joystick.povDown().onTrue(
             new InstantCommand(() -> {
                 System.out.println("down 1");
@@ -107,16 +107,17 @@ public class RobotContainer {
                 System.out.println("down 2");
                 m_Shooter.setShooterPower(nextLarge, nextSmall); 
             }));
-        // left arrow key to stop
+        // Left Key: Stop everything
         joystick.povLeft().onTrue(
             new InstantCommand(() -> {
                 System.out.println("left pressed");
                 m_Shooter.stop();
             }));
+
         // INTAKE commands -> Uncomment when tuned -> also set correct ids too
         //joystick.rightBumper().whileTrue(m_Intake.runIntakeCommand());
 
-        // INDEXER commands -> also uncommented the original B command (look above)
+        // INDEXER commands -> set correct IDs
         //joystick.x().onTrue(m_Indexer.toggleIndexer(0.5));
 
     }

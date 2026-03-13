@@ -52,6 +52,7 @@ public class ShooterSubsystem extends SubsystemBase {
         smallPower = Math.max(-1.0, Math.min(1.0, small));
 
         // currentPower = Math.max(0.0, Math.min(1.0, power));
+
         motorLeader.set(largePower); // changed from current power
         smallRoller.set(smallPower); // changed from current power
     }
@@ -78,7 +79,7 @@ public class ShooterSubsystem extends SubsystemBase {
         double largeMotorReading = SmartDashboard.getNumber("Large Motor", 0.0);
         double smallMotorReading = SmartDashboard.getNumber("Small Motor", 0.0);
 
-        // READS from dashboard -> comment out when done tuning
+        // Sets values based on dashboard -> COMMENT out when done tuning
         setShooterPower(largeMotorReading, smallMotorReading);
 
         SmartDashboard.putNumber("Shooter large power", largePower);
