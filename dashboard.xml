@@ -1,12 +1,17 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="Shooter large power" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="70" y="154"/>
+		<width>218</width>
+		<height>29</height>
+	</widget>
 	<widget field="Large Motor" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="74" y="64"/>
+		<location x="360" y="43"/>
 		<width>218</width>
 		<height>34</height>
 	</widget>
 	<widget field="Small Motor" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="71" y="105"/>
+		<location x="360" y="89"/>
 		<width>220</width>
 		<height>34</height>
 	</widget>

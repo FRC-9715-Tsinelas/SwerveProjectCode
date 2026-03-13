@@ -83,7 +83,7 @@ public class ShooterSubsystem extends SubsystemBase {
         setShooterPower(largeMotorReading, smallMotorReading);
 
         SmartDashboard.putNumber("Shooter large power", largePower);
-        SmartDashboard.putNumber("Shooter large power", smallPower);
+        SmartDashboard.putNumber("Shooter small power", smallPower);
 
         SmartDashboard.putNumber("Shooter RPM", motorLeader.getEncoder().getVelocity());
         SmartDashboard.putNumber("Shooter Current", motorLeader.getOutputCurrent());
