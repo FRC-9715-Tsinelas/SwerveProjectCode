@@ -7,9 +7,9 @@ package frc.robot;
 import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.utility.WheelForceCalculator.Feedforwards;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
-import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -24,6 +24,15 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+
+// Path Planner Imports
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.config.PIDConstants;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class RobotContainer {
     // Subsystems Declaration
@@ -47,8 +56,48 @@ public class RobotContainer {
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
+    // List object for autos
+    private final  SendableChooser<Command> autoChooser;
+    private final SwerveRequest.ApplyRobotSpeeds autoRequest = new SwerveRequest.ApplyRobotSpeeds();
+
+    private void configurePathPlanner() {
+        // not working with try catch
+        try {
+            RobotConfig config = RobotConfig.fromGUISettings();
+
+            AutoBuilder.configure(
+                () -> drivetrain.getState().Pose,
+                drivetrain::resetPose, // reset,
+                () -> drivetrain.getState().Speeds,
+
+               (speeds, feedforwards) -> drivetrain.setControl(autoRequest.withSpeeds(speeds)),
+               new PPHolonomicDriveController(
+                    new PIDConstants(5.0, 0.0, 0.0), //translation
+                    new PIDConstants(5.0, 0.0, 0.0) //rotation
+               ),
+               config, // robot config
+               () -> {
+                    //should flip for alliance
+                    var alliance = DriverStation.getAlliance();
+                    if (alliance.isPresent()){
+                        return alliance.get() == DriverStation.Alliance.Red;
+                    }
+                    return false;
+               },
+               drivetrain
+            );
+        } catch (Exception e) {
+            DriverStation.reportError("can't find path planner config", e.getStackTrace());
+        }
+    }
+
     public RobotContainer() {
         configureBindings();
+
+        // path planner
+        configurePathPlanner();
+        autoChooser = AutoBuilder.buildAutoChooser();
+        SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 
     private void configureBindings() {
@@ -123,21 +172,22 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
+        return autoChooser.getSelected();
         // Simple drive forward auton
-        final var idle = new SwerveRequest.Idle();
-        return Commands.sequence(
-            // Reset our field centric heading to match the robot
-            // facing away from our alliance station wall (0 deg).
-            drivetrain.runOnce(() -> drivetrain.seedFieldCentric(Rotation2d.kZero)),
-            // Then slowly drive forward (away from us) for 5 seconds.
-            drivetrain.applyRequest(() ->
-                drive.withVelocityX(0.5)
-                    .withVelocityY(0)
-                    .withRotationalRate(0)
-            )
-            .withTimeout(5.0),
-            // Finally idle for the rest of auton
-            drivetrain.applyRequest(() -> idle)
-        );
+        // final var idle = new SwerveRequest.Idle();
+        // return Commands.sequence(
+        //     // Reset our field centric heading to match the robot
+        //     // facing away from our alliance station wall (0 deg).
+        //     drivetrain.runOnce(() -> drivetrain.seedFieldCentric(Rotation2d.kZero)),
+        //     // Then slowly drive forward (away from us) for 5 seconds.
+        //     drivetrain.applyRequest(() ->
+        //         drive.withVelocityX(0.5)
+        //             .withVelocityY(0)
+        //             .withRotationalRate(0)
+        //     )
+        //     .withTimeout(5.0),
+        //     // Finally idle for the rest of auton
+        //     drivetrain.applyRequest(() -> idle)
+        // );
     }
 }

@@ -7,7 +7,9 @@ import java.util.function.Supplier;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.configs.CANdleConfiguration;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
+import com.ctre.phoenix6.controls.SolidColor;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -31,6 +33,13 @@ import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 import frc.robot.generated.TunerConstants;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 
+// candle
+import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.hardware.CANdle;
+import com.ctre.phoenix6.signals.RGBWColor;
+import com.ctre.phoenix6.controls.SolidColor;
+
+
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
  * Subsystem so it can easily be used in command-based projects.
@@ -42,6 +51,11 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private static final double kSimLoopPeriod = 0.004; // 4 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
+
+    private final CANBus kCANBus = new CANBus("herbivore");
+    private final CANdle m_candle = new CANdle(25, kCANBus);
+
+    private static final RGBWColor kRed = new RGBWColor(255, 0, 0, 0);
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
@@ -55,6 +69,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
     private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
 
+    
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
         new SysIdRoutine.Config(
@@ -117,6 +132,12 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     /* The SysId routine to test */
     private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineTranslation;
 
+    public void setLEDsRed() {
+        var cfg = new CANdleConfiguration();
+        m_candle.getConfigurator().apply(cfg);
+        m_candle.setControl(new SolidColor(0,7).withColor(kRed));
+    }
+
     /**
      * Constructs a CTRE SwerveDrivetrain using the specified constants.
      * <p>
@@ -133,6 +154,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     ) {
         super(drivetrainConstants, modules);
         brokenModuleConfig();
+        setLEDsRed();
+     
         if (Utils.isSimulation()) {
             startSimThread();
         }
