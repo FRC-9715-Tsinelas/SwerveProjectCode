@@ -16,6 +16,7 @@ public class IndexerSubsystem extends SubsystemBase {
     private final SparkMaxConfig indexerConfig;
 
     private boolean isRunning = false;
+    public double currentPower = 0.0;
 
     public IndexerSubsystem() {
         // changed brushless to brushed
@@ -56,6 +57,19 @@ public class IndexerSubsystem extends SubsystemBase {
                 runIndexer(speed);
             }
         });
+    }
+
+    public void setIndexerPower(double speed) {
+        currentPower = Math.max(-1.0, Math.min(1.0, speed));
+
+        // currentPower = Math.max(0.0, Math.min(1.0, power));
+
+        indexerMotor.set(currentPower);
+    }
+
+
+    public double getCurrentPower() {
+        return currentPower;
     }
 
     @Override

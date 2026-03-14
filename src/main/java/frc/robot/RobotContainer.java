@@ -39,7 +39,7 @@ public class RobotContainer {
     // Subsystems Declaration
     private final ShooterSubsystem m_Shooter = new ShooterSubsystem();
     private final IntakeSubsystem m_Intake = new IntakeSubsystem();
-    // private final IndexerSubsystem m_Indexer = new IndexerSubsystem();
+    private final IndexerSubsystem m_Indexer = new IndexerSubsystem();
 
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
@@ -173,13 +173,35 @@ public class RobotContainer {
                 m_Intake.stop();
             }));
         
-        joystick.x().onTrue(
-            new InstantCommand(() -> {
-                m_Intake.runTestIntake(0.25);
-            }));
+        // joystick.x().onTrue(
+        //     new InstantCommand(() -> {
+        //         m_Intake.runTestIntake(2);
+        //     }));
+
+        joystick.x().whileTrue(
+            m_Intake.startEnd(
+                () -> m_Intake.runTestIntake(0.5),
+                () -> m_Intake.stop()
+            ));
 
         // INDEXER commands -> set correct IDs
-        //joystick.x().onTrue(m_Indexer.toggleIndexer(0.5));
+        //joystick.y().onTrue(m_Indexer.toggleIndexer(1));
+
+        joystick.y().onTrue(
+            new InstantCommand(() -> {
+                System.out.println("indexer up");
+                double nextSpeed = m_Indexer.getCurrentPower() + 0.05;
+                m_Indexer.setIndexerPower(nextSpeed); 
+            }));
+
+        joystick.b().onTrue(
+            new InstantCommand(() -> {
+                // System.out.println("b pressed");
+                // m_Indexer.stopIndexer();
+                System.out.println("indexer down");
+                double nextSpeed = m_Indexer.getCurrentPower() - 0.05;
+                m_Indexer.setIndexerPower(nextSpeed); 
+            }));
 
     }
 

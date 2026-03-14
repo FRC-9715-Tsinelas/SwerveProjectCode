@@ -87,8 +87,8 @@ public class IntakeSubsystem extends SubsystemBase  {
     }
 
     public void runTestIntake(double speed) {
-        currentPower = Math.max(-1.0, Math.min(1.0, speed));
-        pivot.set(currentPower);
+        //currentPower = Math.max(-1.0, Math.min(1.0, speed));
+        pivot.set(speed);
     }
 
     public void stop() {
@@ -98,19 +98,19 @@ public class IntakeSubsystem extends SubsystemBase  {
     
     @Override
     public void periodic() {
-        double currentAngle = pivotAbsoluteEncoder.getPosition();
-        SmartDashboard.putNumber("Intake Arm Angle", currentAngle);
+        // double currentAngle = pivotAbsoluteEncoder.getPosition();
+        // SmartDashboard.putNumber("Intake Arm Angle", currentAngle);
 
-        double currentAngleRad = Units.degreesToRadians(pivotAbsoluteEncoder.getPosition());
-        double ffVoltage = feedforward.calculate(currentAngleRad, 0);
+        // double currentAngleRad = Units.degreesToRadians(pivotAbsoluteEncoder.getPosition());
+        // double ffVoltage = feedforward.calculate(currentAngleRad, 0);
 
-        double targetAngle = Math.min(Math.max(currentState.angleDegrees, IntakeConstants.kMinAngle), IntakeConstants.kMaxAngle);
-        pivotController.setSetpoint(
-            targetAngle, 
-            SparkMax.ControlType.kPosition,
-            com.revrobotics.spark.ClosedLoopSlot.kSlot0,
-            ffVoltage
-        );
+        // double targetAngle = Math.min(Math.max(currentState.angleDegrees, IntakeConstants.kMinAngle), IntakeConstants.kMaxAngle);
+        // pivotController.setSetpoint(
+        //     targetAngle, 
+        //     SparkMax.ControlType.kPosition,
+        //     com.revrobotics.spark.ClosedLoopSlot.kSlot0,
+        //     ffVoltage
+        // );
     }
 
     public Command runIntakeCommand() {

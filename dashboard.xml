@@ -1,5 +1,11 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="Indexer Output" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="377"/>
+	</widget>
+	<widget field="Indexer Running" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="356"/>
+	</widget>
 	<widget field="Auto Chooser" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
 		<location x="0" y="75"/>
 	</widget>
@@ -54,9 +60,4 @@
 </dashboard>
 <live-window>
 </live-window>
-	<hidden field="Module 2"/>
-	<hidden field="Module 3"/>
-	<hidden field="Module 0"/>
-	<hidden field="Module 1"/>
-	<hidden field="PathPlanner"/>
 </xml>

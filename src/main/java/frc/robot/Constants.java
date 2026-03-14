@@ -15,7 +15,7 @@ public final class Constants {
         public static final IdleMode kRollerIdleMode = IdleMode.kCoast;
 
         // current limits (amps)
-        public static final int kPivotCurrentLimit = 30; // Adjust if needed
+        public static final int kPivotCurrentLimit = 45; // Adjust if needed
         public static final int kRollerCurrentLimit = 20;
 
         // PID
@@ -44,7 +44,7 @@ public final class Constants {
         public static final double kMaxAngle = 90.0;
     }
     public static final class IndexerConstants {
-        public static final int INDEXER_MOTOR_ID = 0; // change to correct port
+        public static final int INDEXER_MOTOR_ID = 4; // change to correct port
 
         public static final boolean kIndexerInverted = false;
 

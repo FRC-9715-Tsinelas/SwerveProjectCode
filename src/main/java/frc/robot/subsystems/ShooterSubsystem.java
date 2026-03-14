@@ -80,7 +80,7 @@ public class ShooterSubsystem extends SubsystemBase {
         double smallMotorReading = SmartDashboard.getNumber("Small Motor", 0.0);
 
         // Sets values based on dashboard -> COMMENT out when done tuning
-        setShooterPower(largeMotorReading, smallMotorReading);
+        // setShooterPower(largeMotorReading, smallMotorReading);
 
         SmartDashboard.putNumber("Shooter large power", largePower);
         SmartDashboard.putNumber("Shooter small power", smallPower);
