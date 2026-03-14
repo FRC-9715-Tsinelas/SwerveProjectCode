@@ -24,6 +24,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.IntakeSubsystem.IntakeState;
 
 // Path Planner Imports
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -37,7 +38,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class RobotContainer {
     // Subsystems Declaration
     private final ShooterSubsystem m_Shooter = new ShooterSubsystem();
-    // private final IntakeSubsystem m_Intake = new IntakeSubsystem();
+    private final IntakeSubsystem m_Intake = new IntakeSubsystem();
     // private final IndexerSubsystem m_Indexer = new IndexerSubsystem();
 
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -163,8 +164,19 @@ public class RobotContainer {
                 m_Shooter.stop();
             }));
 
-        // INTAKE commands -> Uncomment when tuned -> also set correct ids too
-        //joystick.rightBumper().whileTrue(m_Intake.runIntakeCommand());
+        //INTAKE commands -> Uncomment when tuned -> also set correct ids too
+        joystick.rightBumper().whileTrue(m_Intake.runIntakeCommand());
+
+        joystick.povRight().onTrue(
+            new InstantCommand(() -> {
+                System.out.println("right pressed");
+                m_Intake.stop();
+            }));
+        
+        joystick.x().onTrue(
+            new InstantCommand(() -> {
+                m_Intake.runTestIntake(0.25);
+            }));
 
         // INDEXER commands -> set correct IDs
         //joystick.x().onTrue(m_Indexer.toggleIndexer(0.5));

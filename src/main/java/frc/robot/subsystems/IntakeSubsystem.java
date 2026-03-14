@@ -4,12 +4,11 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.spark.*;
-import com.revrobotics.spark.SparkClosedLoopController;
+
 import frc.robot.Constants.IntakeConstants;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.FeedbackSensor;
+
 import edu.wpi.first.wpilibj2.command.Command;
 
 import edu.wpi.first.math.util.Units;
@@ -63,20 +62,21 @@ public class IntakeSubsystem extends SubsystemBase  {
             .idleMode(IntakeConstants.kPivotIdleMode)
             .inverted(IntakeConstants.kPivotInverted);
 
-        pivotConfig.absoluteEncoder
-            .positionConversionFactor(360.0)
-            .velocityConversionFactor(360.0 / 60.0)
-            .zeroOffset(IntakeConstants.kEncoderOffset);
+        // pivotConfig.absoluteEncoder
+        //     .positionConversionFactor(360.0)
+        //     .velocityConversionFactor(360.0 / 60.0)
+        //     .zeroOffset(IntakeConstants.kEncoderOffset);
         
-        pivotConfig.closedLoop
-            .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-            .p(IntakeConstants.kP)
-            .i(IntakeConstants.kI)
-            .d(IntakeConstants.kD)
-            .outputRange(IntakeConstants.kMinOutput, IntakeConstants.kMaxOutput);
+        // pivotConfig.closedLoop
+        //     .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
+        //     .p(IntakeConstants.kP)
+        //     .i(IntakeConstants.kI)
+        //     .d(IntakeConstants.kD)
+        //     .outputRange(IntakeConstants.kMinOutput, IntakeConstants.kMaxOutput);
         
         pivot.configure(pivotConfig, com.revrobotics.ResetMode.kResetSafeParameters, com.revrobotics.PersistMode.kPersistParameters);
     }
+    public double currentPower = 0.0;
 
     public void setIntakeState(IntakeState state) {
         this.currentState = state;
@@ -86,8 +86,14 @@ public class IntakeSubsystem extends SubsystemBase  {
         roller.set(speed);
     }
 
+    public void runTestIntake(double speed) {
+        currentPower = Math.max(-1.0, Math.min(1.0, speed));
+        pivot.set(currentPower);
+    }
+
     public void stop() {
         roller.set(0);
+        pivot.set(0);
     }
     
     @Override
