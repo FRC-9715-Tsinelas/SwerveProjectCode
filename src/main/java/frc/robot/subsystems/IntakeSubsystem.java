@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.*;
 
 import frc.robot.Constants.IntakeConstants;
@@ -29,6 +30,7 @@ public class IntakeSubsystem extends SubsystemBase  {
     private final SparkMax pivot;
 
     private final SparkAbsoluteEncoder pivotAbsoluteEncoder;
+    private final RelativeEncoder pivotEncoder;
     private final SparkClosedLoopController pivotController;
 
     private final ArmFeedforward feedforward;
@@ -42,6 +44,7 @@ public class IntakeSubsystem extends SubsystemBase  {
 
         pivotAbsoluteEncoder = pivot.getAbsoluteEncoder();
         pivotController = pivot.getClosedLoopController();
+        pivotEncoder = pivot.getEncoder();
 
         feedforward = new ArmFeedforward(
             IntakeConstants.kS, 
@@ -64,22 +67,33 @@ public class IntakeSubsystem extends SubsystemBase  {
             .idleMode(IntakeConstants.kPivotIdleMode)
             .inverted(IntakeConstants.kPivotInverted);
 
-        pivotConfig.absoluteEncoder
-            .positionConversionFactor(360.0)
-            .velocityConversionFactor(360.0 / 60.0)
-            .zeroOffset(IntakeConstants.kEncoderOffset);
+        // pivotConfig.absoluteEncoder
+        //     .positionConversionFactor(360.0)
+        //     .velocityConversionFactor(360.0 / 60.0)
+        //     .zeroOffset(IntakeConstants.kEncoderOffset);
 
-        pivotConfig.signals
-            .absoluteEncoderPositionPeriodMs(20);
+        pivotConfig.encoder
+            .positionConversionFactor(-360.0 / 12.5)
+            .velocityConversionFactor(360.0 / 12.5 / 60);
+
+        pivotConfig.softLimit
+            .forwardSoftLimit(95)
+            .reverseSoftLimit(-5.0)
+            .forwardSoftLimitEnabled(true)
+            .reverseSoftLimitEnabled(true);
         
         pivotConfig.closedLoop
-            .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
+            .feedbackSensor(FeedbackSensor.kPrimaryEncoder);
+        // pivotConfig.closedLoop
+        //     .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
         //     .p(IntakeConstants.kP)
         //     .i(IntakeConstants.kI)
         //     .d(IntakeConstants.kD)
         //     .outputRange(IntakeConstants.kMinOutput, IntakeConstants.kMaxOutput);
         
         pivot.configure(pivotConfig, com.revrobotics.ResetMode.kResetSafeParameters, com.revrobotics.PersistMode.kPersistParameters);
+
+        pivotEncoder.setPosition(0);
     }
     
 
@@ -107,8 +121,9 @@ public class IntakeSubsystem extends SubsystemBase  {
     
     @Override
     public void periodic() {
-        double currentAngle = pivotAbsoluteEncoder.getPosition();
-        
+        double currentAngle = pivotEncoder.getPosition();
+        SmartDashboard.putNumber("Intake arm angle", currentAngle);
+
         SmartDashboard.putNumber("Intake Arm Angle", pivotAbsoluteEncoder.getPosition());
         SmartDashboard.putNumber("Intake velocity", pivotAbsoluteEncoder.getVelocity());
 

@@ -33,8 +33,8 @@ public final class Constants {
         public static final double kMaxOutput = 1.0;
 
         // angles
-        public static final double kAngleStowed = -5.0;
-        public static final double kAngleGround = 95.0;
+        public static final double kAngleStowed = 0.0;
+        public static final double kAngleGround = 90.0;
 
         // this gotta be adjusted by placing arm at 0 degrees then read the raw value
         public static final double kEncoderOffset = 0.0;
