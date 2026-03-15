@@ -62,10 +62,10 @@ public class IntakeSubsystem extends SubsystemBase  {
             .idleMode(IntakeConstants.kPivotIdleMode)
             .inverted(IntakeConstants.kPivotInverted);
 
-        // pivotConfig.absoluteEncoder
-        //     .positionConversionFactor(360.0)
-        //     .velocityConversionFactor(360.0 / 60.0)
-        //     .zeroOffset(IntakeConstants.kEncoderOffset);
+        pivotConfig.absoluteEncoder
+            .positionConversionFactor(360.0)
+            .velocityConversionFactor(360.0 / 60.0)
+            .zeroOffset(IntakeConstants.kEncoderOffset);
         
         // pivotConfig.closedLoop
         //     .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
@@ -98,8 +98,8 @@ public class IntakeSubsystem extends SubsystemBase  {
     
     @Override
     public void periodic() {
-        // double currentAngle = pivotAbsoluteEncoder.getPosition();
-        // SmartDashboard.putNumber("Intake Arm Angle", currentAngle);
+        double currentAngle = pivotAbsoluteEncoder.getPosition();
+        SmartDashboard.putNumber("Intake Arm Angle", currentAngle);
 
         // double currentAngleRad = Units.degreesToRadians(pivotAbsoluteEncoder.getPosition());
         // double ffVoltage = feedforward.calculate(currentAngleRad, 0);
