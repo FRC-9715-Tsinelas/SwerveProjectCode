@@ -9,7 +9,7 @@ public final class Constants {
         public static final int ROLLER_ID = 6; // Change to correct ID
 
         // General motor settings
-        public static final boolean kRollerInverted = false; // Change if motor is moving wrong way
+        public static final boolean kRollerInverted = true; // Change if motor is moving wrong way
         public static final boolean kPivotInverted = false; // Change if motor is moving wrong way
         public static final IdleMode kPivotIdleMode = IdleMode.kBrake;
         public static final IdleMode kRollerIdleMode = IdleMode.kCoast;
@@ -25,16 +25,16 @@ public final class Constants {
 
         // Feedforward
         public static final double kS = 0.0; // Voltage to overcome friction
-        public static final double kV = 0.0; // to overcome gravity
-        public static final double kG = 0.0; // velocity gain
+        public static final double kV = 0.0; // vlocity gain
+        public static final double kG = 0.0; // to overcome gravity
 
         // constraints
         public static final double kMinOutput = -1.0;
         public static final double kMaxOutput = 1.0;
 
         // angles
-        public static final double kAngleStowed = 0.0;
-        public static final double kAngleGround = 90.0;
+        public static final double kAngleStowed = -5.0;
+        public static final double kAngleGround = 95.0;
 
         // this gotta be adjusted by placing arm at 0 degrees then read the raw value
         public static final double kEncoderOffset = 0.0;

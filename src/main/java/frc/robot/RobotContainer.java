@@ -23,6 +23,7 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.IntakeSubsystem.IntakeState;
 
@@ -40,6 +41,7 @@ public class RobotContainer {
     private final ShooterSubsystem m_Shooter = new ShooterSubsystem();
     private final IntakeSubsystem m_Intake = new IntakeSubsystem();
     private final IndexerSubsystem m_Indexer = new IndexerSubsystem();
+    private final LEDSubsystem m_LED = new LEDSubsystem();
 
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
@@ -99,6 +101,8 @@ public class RobotContainer {
         configurePathPlanner();
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
+
+        m_LED.setDefaultCommand(m_LED.run(() -> m_LED.setRed()));
     }
 
     private void configureBindings() {
@@ -142,18 +146,19 @@ public class RobotContainer {
         // Up Key: Increase motor powers by 0.05 | Change when it's tuned
         joystick.povUp().onTrue(
             new InstantCommand(() -> {
-                System.out.println("up 1");
-                double nextLarge = m_Shooter.getLargePower() + 0.05;
-                double nextSmall = m_Shooter.getSmallPower() + 0.05;
-                System.out.println("up 2");
-                m_Shooter.setShooterPower(nextLarge, nextSmall); 
+                // System.out.println("up 1");
+                // double nextLarge = m_Shooter.getLargePower() + 0.05;
+                // double nextSmall = m_Shooter.getSmallPower() + 0.05;
+                // System.out.println("up 2");
+                // m_Shooter.setShooterPower(nextLarge, nextSmall); 
+                m_Shooter.setShooterPower(0.55, 0.55); 
             }));
         // Down Key: Decrease motor powers by 0.05 | Change when it's tuned
         joystick.povDown().onTrue(
             new InstantCommand(() -> {
                 System.out.println("down 1");
-                double nextLarge = m_Shooter.getLargePower() - 0.05;
-                double nextSmall = m_Shooter.getSmallPower() - 0.05;
+                double nextLarge = m_Shooter.getLargePower() + 0.05;
+                double nextSmall = m_Shooter.getSmallPower() + 0.05;
                 System.out.println("down 2");
                 m_Shooter.setShooterPower(nextLarge, nextSmall); 
             }));
@@ -165,7 +170,7 @@ public class RobotContainer {
             }));
 
         //INTAKE commands -> Uncomment when tuned -> also set correct ids too
-        joystick.rightBumper().whileTrue(m_Intake.runIntakeCommand());
+        joystick.rightBumper().whileTrue(m_Intake.runIntakeCommand(1.0));
 
         joystick.povRight().onTrue(
             new InstantCommand(() -> {
@@ -178,30 +183,35 @@ public class RobotContainer {
         //         m_Intake.runTestIntake(2);
         //     }));
 
-        joystick.x().whileTrue(
+        joystick.x().onTrue(
             m_Intake.startEnd(
                 () -> m_Intake.runTestIntake(0.5),
                 () -> m_Intake.stop()
-            ));
+            ).withTimeout(0.3));
 
         // INDEXER commands -> set correct IDs
         //joystick.y().onTrue(m_Indexer.toggleIndexer(1));
+        joystick.y().whileTrue(
+            m_Indexer.runEnd(
+                () -> m_Indexer.setIndexerPower(0.6),
+                () -> m_Indexer.stopIndexer()
+            ));
 
-        joystick.y().onTrue(
-            new InstantCommand(() -> {
-                System.out.println("indexer up");
-                double nextSpeed = m_Indexer.getCurrentPower() + 0.05;
-                m_Indexer.setIndexerPower(nextSpeed); 
-            }));
+        // joystick.y().onTrue(
+        //     new InstantCommand(() -> {
+        //         System.out.println("indexer up");
+        //         double nextSpeed = m_Indexer.getCurrentPower() + 0.05;
+        //         m_Indexer.setIndexerPower(nextSpeed); 
+        //     }));
 
-        joystick.b().onTrue(
-            new InstantCommand(() -> {
-                // System.out.println("b pressed");
-                // m_Indexer.stopIndexer();
-                System.out.println("indexer down");
-                double nextSpeed = m_Indexer.getCurrentPower() - 0.05;
-                m_Indexer.setIndexerPower(nextSpeed); 
-            }));
+        // joystick.b().onTrue(
+        //     new InstantCommand(() -> {
+        //         // System.out.println("b pressed");
+        //         // m_Indexer.stopIndexer();
+        //         System.out.println("indexer down");
+        //         double nextSpeed = m_Indexer.getCurrentPower() - 0.05;
+        //         m_Indexer.setIndexerPower(nextSpeed); 
+        //     }));
 
     }
 

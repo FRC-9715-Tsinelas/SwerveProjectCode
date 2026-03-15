@@ -34,6 +34,8 @@ public class IntakeSubsystem extends SubsystemBase  {
     private final ArmFeedforward feedforward;
     private IntakeState currentState = IntakeState.STOWED;
 
+    public double currentPower = 0.0;
+
     public IntakeSubsystem(){
         roller = new SparkMax(IntakeConstants.ROLLER_ID, MotorType.kBrushless);
         pivot = new SparkMax(IntakeConstants.PIVOT_ID, MotorType.kBrushless);
@@ -67,8 +69,8 @@ public class IntakeSubsystem extends SubsystemBase  {
             .velocityConversionFactor(360.0 / 60.0)
             .zeroOffset(IntakeConstants.kEncoderOffset);
         
-        // pivotConfig.closedLoop
-        //     .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
+        pivotConfig.closedLoop
+            .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
         //     .p(IntakeConstants.kP)
         //     .i(IntakeConstants.kI)
         //     .d(IntakeConstants.kD)
@@ -76,7 +78,7 @@ public class IntakeSubsystem extends SubsystemBase  {
         
         pivot.configure(pivotConfig, com.revrobotics.ResetMode.kResetSafeParameters, com.revrobotics.PersistMode.kPersistParameters);
     }
-    public double currentPower = 0.0;
+    
 
     public void setIntakeState(IntakeState state) {
         this.currentState = state;
@@ -91,6 +93,10 @@ public class IntakeSubsystem extends SubsystemBase  {
         pivot.set(speed);
     }
 
+    public void setTargetAngle(double targetAngle) {
+        double safeAngle = Math.min(Math.max(targetAngle, IntakeConstants.kMinAngle), IntakeConstants.kMaxAngle);
+    }
+
     public void stop() {
         roller.set(0);
         pivot.set(0);
@@ -99,7 +105,9 @@ public class IntakeSubsystem extends SubsystemBase  {
     @Override
     public void periodic() {
         double currentAngle = pivotAbsoluteEncoder.getPosition();
+        
         SmartDashboard.putNumber("Intake Arm Angle", currentAngle);
+        //SmartDashboard.putNumber("Intake Arm Angle", Math.random());
 
         // double currentAngleRad = Units.degreesToRadians(pivotAbsoluteEncoder.getPosition());
         // double ffVoltage = feedforward.calculate(currentAngleRad, 0);
@@ -113,9 +121,9 @@ public class IntakeSubsystem extends SubsystemBase  {
         // );
     }
 
-    public Command runIntakeCommand() {
+    public Command runIntakeCommand(double speed) {
         return this.startEnd(
-            () -> this.setRollerSpeed(0.2),
+            () -> this.setRollerSpeed(speed),
             () -> this.stop()
         );
     }

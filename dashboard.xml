@@ -1,22 +1,22 @@
 <xml version="1.0">
 <dashboard>
 	<widget field="Indexer Output" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="377"/>
+		<location x="387" y="195"/>
 	</widget>
 	<widget field="Indexer Running" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="356"/>
+		<location x="385" y="166"/>
 	</widget>
 	<widget field="Auto Chooser" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
-		<location x="0" y="75"/>
+		<location x="401" y="275"/>
 	</widget>
 	<widget field="Intake Arm Angle" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="54"/>
+		<location x="53" y="77"/>
 	</widget>
 	<widget field="Shooter small power" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="33"/>
+		<location x="93" y="158"/>
 	</widget>
 	<widget field="Shooter large power" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="70" y="154"/>
+		<location x="73" y="190"/>
 		<width>218</width>
 		<height>29</height>
 	</widget>
@@ -48,11 +48,6 @@
 		<location x="91" y="229"/>
 		<width>197</width>
 		<height>35</height>
-	</widget>
-	<widget field="Shooter power" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="81" y="190"/>
-		<width>209</width>
-		<height>32</height>
 	</widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
 		<location x="0" y="0"/>
