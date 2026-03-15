@@ -102,7 +102,8 @@ public class RobotContainer {
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
-        m_LED.setDefaultCommand(m_LED.run(() -> m_LED.setRed()));
+        //m_LED.setDefaultCommand(m_LED.run(() -> m_LED.setRed()));
+        m_LED.setDefaultCommand(Commands.runOnce(m_LED::setRed, m_LED));
     }
 
     private void configureBindings() {
