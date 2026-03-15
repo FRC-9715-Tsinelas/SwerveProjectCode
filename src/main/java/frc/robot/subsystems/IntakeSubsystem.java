@@ -68,6 +68,9 @@ public class IntakeSubsystem extends SubsystemBase  {
             .positionConversionFactor(360.0)
             .velocityConversionFactor(360.0 / 60.0)
             .zeroOffset(IntakeConstants.kEncoderOffset);
+
+        pivotConfig.signals
+            .absoluteEncoderPositionPeriodMs(20);
         
         pivotConfig.closedLoop
             .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
@@ -106,7 +109,13 @@ public class IntakeSubsystem extends SubsystemBase  {
     public void periodic() {
         double currentAngle = pivotAbsoluteEncoder.getPosition();
         
-        SmartDashboard.putNumber("Intake Arm Angle", currentAngle);
+        SmartDashboard.putNumber("Intake Arm Angle", pivotAbsoluteEncoder.getPosition());
+        SmartDashboard.putNumber("Intake velocity", pivotAbsoluteEncoder.getVelocity());
+
+        SmartDashboard.putNumber("Intake check", pivot.getBusVoltage());
+
+        
+        //SmartDashboard.putBoolean("encoder conected", pivotAbsoluteEncoder.isConnected());
         //SmartDashboard.putNumber("Intake Arm Angle", Math.random());
 
         // double currentAngleRad = Units.degreesToRadians(pivotAbsoluteEncoder.getPosition());

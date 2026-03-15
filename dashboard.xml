@@ -1,5 +1,11 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="Intake check" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="98" y="61"/>
+	</widget>
+	<widget field="Intake velocity" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="87" y="123"/>
+	</widget>
 	<widget field="Indexer Output" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="387" y="195"/>
 	</widget>
@@ -10,7 +16,7 @@
 		<location x="401" y="275"/>
 	</widget>
 	<widget field="Intake Arm Angle" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="53" y="77"/>
+		<location x="85" y="101"/>
 	</widget>
 	<widget field="Shooter small power" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="93" y="158"/>
