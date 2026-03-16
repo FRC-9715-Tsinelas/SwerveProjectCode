@@ -171,7 +171,14 @@ public class RobotContainer {
             }));
 
         //INTAKE commands -> Uncomment when tuned -> also set correct ids too
-        joystick.rightBumper().whileTrue(m_Intake.runIntakeCommand(1.0));
+        //joystick.rightBumper().whileTrue(m_Intake.runIntakeCommand(2.0));
+
+        joystick.rightBumper().onTrue(
+            new InstantCommand(() -> {
+                double nextSpeed = m_Intake.getCurrentPower() + 0.15;
+                m_Intake.setRollerSpeed(nextSpeed);
+            }));
+
 
         joystick.povRight().onTrue(
             new InstantCommand(() -> {

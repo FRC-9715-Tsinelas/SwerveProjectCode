@@ -8,10 +8,10 @@ import com.ctre.phoenix6.CANBus;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LEDSubsystem extends SubsystemBase {
-    private final CANBus kCanBus = new CANBus("herbivore");
+    private final CANBus kCanBus = new CANBus("Herbivore");
     private final CANdle m_candle = new CANdle(25, kCanBus);
 
-    private static final RGBWColor redColor = new RGBWColor(255, 0, 0,0 );
+    private static final RGBWColor redColor = new RGBWColor(255, 0, 0,0);
 
     public LEDSubsystem() {
         CANdleConfiguration config = new CANdleConfiguration();

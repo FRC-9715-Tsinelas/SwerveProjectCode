@@ -72,9 +72,9 @@ public class IntakeSubsystem extends SubsystemBase  {
         //     .velocityConversionFactor(360.0 / 60.0)
         //     .zeroOffset(IntakeConstants.kEncoderOffset);
 
-        pivotConfig.encoder
-            .positionConversionFactor(-360.0 / 12.5)
-            .velocityConversionFactor(360.0 / 12.5 / 60);
+        // pivotConfig.encoder
+        //     .positionConversionFactor(-360.0 / 12.5)
+        //     .velocityConversionFactor(360.0 / 12.5 / 60);
 
         pivotConfig.softLimit
             .forwardSoftLimit(95)
@@ -82,10 +82,10 @@ public class IntakeSubsystem extends SubsystemBase  {
             .forwardSoftLimitEnabled(true)
             .reverseSoftLimitEnabled(true);
         
-        pivotConfig.closedLoop
-            .feedbackSensor(FeedbackSensor.kPrimaryEncoder);
         // pivotConfig.closedLoop
-        //     .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
+        //     .feedbackSensor(FeedbackSensor.kPrimaryEncoder);
+        pivotConfig.closedLoop
+            .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
         //     .p(IntakeConstants.kP)
         //     .i(IntakeConstants.kI)
         //     .d(IntakeConstants.kD)
@@ -95,6 +95,10 @@ public class IntakeSubsystem extends SubsystemBase  {
 
         pivotEncoder.setPosition(0);
     }
+
+    public double getCurrentPower() {
+        return currentPower;
+    }
     
 
     public void setIntakeState(IntakeState state) {
@@ -102,6 +106,7 @@ public class IntakeSubsystem extends SubsystemBase  {
     }
 
     public void setRollerSpeed(double speed) {
+        // currentPower = Math.max(-1.0, Math.min(1.0, speed));
         roller.set(speed);
     }
 
@@ -123,6 +128,8 @@ public class IntakeSubsystem extends SubsystemBase  {
     public void periodic() {
         double currentAngle = pivotEncoder.getPosition();
         SmartDashboard.putNumber("Intake arm angle", currentAngle);
+
+        SmartDashboard.putNumber("Intake roller speed", currentPower);
 
         SmartDashboard.putNumber("Intake Arm Angle", pivotAbsoluteEncoder.getPosition());
         SmartDashboard.putNumber("Intake velocity", pivotAbsoluteEncoder.getVelocity());
