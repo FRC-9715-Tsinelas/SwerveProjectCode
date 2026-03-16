@@ -135,8 +135,6 @@ public class IntakeSubsystem extends SubsystemBase  {
         SmartDashboard.putNumber("Intake Arm Angle", pivotAbsoluteEncoder.getPosition());
         SmartDashboard.putNumber("Intake velocity", pivotAbsoluteEncoder.getVelocity());
 
-        SmartDashboard.putNumber("Intake check", pivot.getBusVoltage());
-
         // double currentAngleRad = Units.degreesToRadians(pivotEncoder.getPosition());
         // double ffVoltage = feedforward.calculate(currentAngleRad, 0);
 

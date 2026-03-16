@@ -51,15 +51,9 @@ public class ShooterSubsystem extends SubsystemBase {
         largePower = Math.max(-1.0, Math.min(1.0, large));
         smallPower = Math.max(-1.0, Math.min(1.0, small));
 
-        // currentPower = Math.max(0.0, Math.min(1.0, power));
-
-        motorLeader.set(largePower); // changed from current power
-        smallRoller.set(smallPower); // changed from current power
+        motorLeader.set(largePower);
+        smallRoller.set(smallPower);
     }
-
-    // public double getCurrentPower() {
-    //     return currentPower;
-    // }
 
     public double getLargePower() {
         return largePower;
@@ -82,13 +76,13 @@ public class ShooterSubsystem extends SubsystemBase {
         // Sets values based on dashboard -> COMMENT out when done tuning
         // setShooterPower(largeMotorReading, smallMotorReading);
 
-        SmartDashboard.putNumber("Shooter large power", largePower);
-        SmartDashboard.putNumber("Shooter small power", smallPower);
+        SmartDashboard.putNumber("Shooter Large Power", largePower);
+        SmartDashboard.putNumber("Shooter Small Power", smallPower);
 
         SmartDashboard.putNumber("Shooter RPM", motorLeader.getEncoder().getVelocity());
         SmartDashboard.putNumber("Shooter Current", motorLeader.getOutputCurrent());
-        SmartDashboard.putNumber("Shooter Small motor temp", smallRoller.getMotorTemperature());
-        SmartDashboard.putNumber("Shooter large motor temp", motorLeader.getMotorTemperature());
+        SmartDashboard.putNumber("Shooter Small Motor Temperature", smallRoller.getMotorTemperature());
+        SmartDashboard.putNumber("Shooter Large Motor Temperature", motorLeader.getMotorTemperature());
     }
 
 }
