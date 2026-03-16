@@ -15,6 +15,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -103,7 +104,7 @@ public class RobotContainer {
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
         //m_LED.setDefaultCommand(m_LED.run(() -> m_LED.setRed()));
-        m_LED.setDefaultCommand(Commands.runOnce(m_LED::setRed, m_LED));
+        m_LED.setDefaultCommand(Commands.runOnce(m_LED::setLights, m_LED));
     }
 
     private void configureBindings() {
@@ -125,7 +126,7 @@ public class RobotContainer {
             drivetrain.applyRequest(() -> idle).ignoringDisable(true)
         );
         // pressing a brakes drivetrain like stop moving
-        joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
+        // joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
         // it looks like pressing b points all the modules to wherever the left joystick is facing
         // joystick.b().whileTrue(drivetrain.applyRequest(() ->
         //     point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
@@ -170,14 +171,18 @@ public class RobotContainer {
                 m_Shooter.stop();
             }));
 
-        //INTAKE commands -> Uncomment when tuned -> also set correct ids too
-        //joystick.rightBumper().whileTrue(m_Intake.runIntakeCommand(2.0));
+        //INTAKE commands -> Uncomment when tuned
+        joystick.rightBumper().whileTrue(m_Intake.runIntakeCommand(0.4));
 
-        joystick.rightBumper().onTrue(
-            new InstantCommand(() -> {
-                double nextSpeed = m_Intake.getCurrentPower() + 0.05;
-                m_Intake.setRollerSpeed(nextSpeed);
-            }));
+        joystick.a().onTrue(
+            new InstantCommand(() -> m_Intake.setAngle())
+        );
+
+        // joystick.rightBumper().onTrue(
+        //     new InstantCommand(() -> {
+        //         double nextSpeed = m_Intake.getCurrentPower() + 0.05;
+        //         m_Intake.setRollerSpeed(nextSpeed);
+        //     }));
 
 
         joystick.povRight().onTrue(

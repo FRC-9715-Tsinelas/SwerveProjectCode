@@ -29,20 +29,26 @@ public class IntakeSubsystem extends SubsystemBase  {
     private final SparkMax roller;
     private final SparkMax pivot;
 
-    private final SparkAbsoluteEncoder pivotAbsoluteEncoder;
+    //private final SparkAbsoluteEncoder pivotAbsoluteEncoder;
     private final RelativeEncoder pivotEncoder;
     private final SparkClosedLoopController pivotController;
 
-    private final ArmFeedforward feedforward;
+    private ArmFeedforward feedforward; // REMOVED final bring back once it's done
     private IntakeState currentState = IntakeState.STOWED;
 
     public double currentPower = 0.0;
+
+    double p = 0.0;
+    double g = 0.0;
+
+    // pivot config
+    SparkMaxConfig pivotConfig = new SparkMaxConfig();
 
     public IntakeSubsystem(){
         roller = new SparkMax(IntakeConstants.ROLLER_ID, MotorType.kBrushless);
         pivot = new SparkMax(IntakeConstants.PIVOT_ID, MotorType.kBrushless);
 
-        pivotAbsoluteEncoder = pivot.getAbsoluteEncoder();
+        //pivotAbsoluteEncoder = pivot.getAbsoluteEncoder();
         pivotController = pivot.getClosedLoopController();
         pivotEncoder = pivot.getEncoder();
 
@@ -59,8 +65,7 @@ public class IntakeSubsystem extends SubsystemBase  {
 
         roller.configure(rollerConfig, com.revrobotics.ResetMode.kResetSafeParameters, com.revrobotics.PersistMode.kPersistParameters);
         
-        // pivot config
-        SparkMaxConfig pivotConfig = new SparkMaxConfig();
+        
 
         pivotConfig
             .smartCurrentLimit(IntakeConstants.kPivotCurrentLimit)
@@ -72,9 +77,9 @@ public class IntakeSubsystem extends SubsystemBase  {
         //     .velocityConversionFactor(360.0 / 60.0)
         //     .zeroOffset(IntakeConstants.kEncoderOffset);
 
-        // pivotConfig.encoder
-        //     .positionConversionFactor(-360.0 / 12.5)
-        //     .velocityConversionFactor(360.0 / 12.5 / 60);
+        pivotConfig.encoder
+            .positionConversionFactor(360.0 / 12.5)
+            .velocityConversionFactor(360.0 / 12.5 / 60);
 
         pivotConfig.softLimit
             .forwardSoftLimit(95)
@@ -82,10 +87,10 @@ public class IntakeSubsystem extends SubsystemBase  {
             .forwardSoftLimitEnabled(true)
             .reverseSoftLimitEnabled(true);
         
-        // pivotConfig.closedLoop
-        //     .feedbackSensor(FeedbackSensor.kPrimaryEncoder);
         pivotConfig.closedLoop
-            .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
+            .feedbackSensor(FeedbackSensor.kPrimaryEncoder);
+        // pivotConfig.closedLoop
+        //     .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
         //     .p(IntakeConstants.kP)
         //     .i(IntakeConstants.kI)
         //     .d(IntakeConstants.kD)
@@ -94,13 +99,15 @@ public class IntakeSubsystem extends SubsystemBase  {
         pivot.configure(pivotConfig, com.revrobotics.ResetMode.kResetSafeParameters, com.revrobotics.PersistMode.kPersistParameters);
 
         pivotEncoder.setPosition(0);
+
+        SmartDashboard.putNumber("P Value", p);
+        SmartDashboard.putNumber("G Value", g);
     }
 
     public double getCurrentPower() {
         return currentPower;
     }
     
-
     public void setIntakeState(IntakeState state) {
         this.currentState = state;
     }
@@ -124,6 +131,21 @@ public class IntakeSubsystem extends SubsystemBase  {
         pivot.set(0);
         currentPower = 0;
     }
+
+    public void setAngle() {
+        double targetAngle = 0.0;
+
+        double ffVoltage = feedforward.calculate(Math.toRadians(pivotEncoder.getPosition()), 0);
+
+        pivotController.setSetpoint(
+            targetAngle,
+            SparkMax.ControlType.kPosition,
+            com.revrobotics.spark.ClosedLoopSlot.kSlot0,
+            ffVoltage
+        );
+    }
+
+    
     
     @Override
     public void periodic() {
@@ -132,19 +154,73 @@ public class IntakeSubsystem extends SubsystemBase  {
 
         SmartDashboard.putNumber("Intake Roller Speed", currentPower);
 
-        SmartDashboard.putNumber("Intake Arm Angle", pivotAbsoluteEncoder.getPosition());
-        SmartDashboard.putNumber("Intake velocity", pivotAbsoluteEncoder.getVelocity());
+        // double testkG = 0.25;
 
-        // double currentAngleRad = Units.degreesToRadians(pivotEncoder.getPosition());
-        // double ffVoltage = feedforward.calculate(currentAngleRad, 0);
+        // double currentAngleRad = Math.toRadians(pivotEncoder.getPosition());
 
-        // double targetAngle = Math.min(Math.max(currentState.angleDegrees, IntakeConstants.kMinAngle), IntakeConstants.kMaxAngle);
+        // double outputVoltage = testkG * Math.cos(currentAngleRad);
+        // pivot.setVoltage(outputVoltage);
+
+        // p = SmartDashboard.getNumber("P Value", p);
+        // g = SmartDashboard.getNumber("G Value", g);
+
+        // double ffVoltage = feedforward.calculate(Math.toRadians(pivotEncoder.getPosition()), 0);
+        // pivotConfig.closedLoop.p(p);
+        // pivot.configure(pivotConfig, com.revrobotics.ResetMode.kResetSafeParameters, com.revrobotics.PersistMode.kPersistParameters);
+
+        // this.feedforward = new ArmFeedforward(0, g, 0);
+
         // pivotController.setSetpoint(
-        //     targetAngle, 
+        //     0.0,
         //     SparkMax.ControlType.kPosition,
         //     com.revrobotics.spark.ClosedLoopSlot.kSlot0,
         //     ffVoltage
         // );
+        
+        // double newP = SmartDashboard.getNumber("P Value", p);
+        // double newG = SmartDashboard.getNumber("G Value", g);
+
+        
+        // if (newP != p || newG != g) {
+        //     p = newP;
+        //     g = newG;
+
+            
+        //     pivotConfig.closedLoop.p(p);
+        //     pivot.configure(pivotConfig, 
+        //         com.revrobotics.ResetMode.kNoResetSafeParameters, 
+        //         com.revrobotics.PersistMode.kNoPersistParameters);
+
+        //     // update
+        //     this.feedforward = new ArmFeedforward(IntakeConstants.kS, g, IntakeConstants.kV);
+        // }
+
+        // //
+        // double currentPosRad = Math.toRadians(pivotEncoder.getPosition());
+        // //currentPosRad = currentPosRad * -1;
+        // double ffVoltage = feedforward.calculate(currentPosRad, 0);
+
+        // pivotController.setSetpoint(
+        //     0.0, 
+        //     SparkMax.ControlType.kPosition,
+        //     com.revrobotics.spark.ClosedLoopSlot.kSlot0,
+        //     ffVoltage
+        // );
+
+        // SmartDashboard.putNumber("Intake Arm Angle", pivotAbsoluteEncoder.getPosition());
+        // SmartDashboard.putNumber("Intake velocity", pivotAbsoluteEncoder.getVelocity());
+
+        double currentAngleRad = Units.degreesToRadians(pivotEncoder.getPosition());
+        double ffVoltage = feedforward.calculate(currentAngleRad, 0);
+
+        double targetAngle = Math.min(Math.max(currentState.angleDegrees, IntakeConstants.kMinAngle), IntakeConstants.kMaxAngle);
+        // pivotController.setSetpoint(
+        //     0, 
+        //     SparkMax.ControlType.kPosition,
+        //     com.revrobotics.spark.ClosedLoopSlot.kSlot0,
+        //     ffVoltage
+        // );
+        pivot.setVoltage(ffVoltage);
     }
 
     public Command runIntakeCommand(double speed) {

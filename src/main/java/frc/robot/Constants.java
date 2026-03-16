@@ -25,8 +25,8 @@ public final class Constants {
 
         // Feedforward
         public static final double kS = 0.0; // Voltage to overcome friction
-        public static final double kV = 0.0; // vlocity gain
-        public static final double kG = 0.0; // to overcome gravity
+        public static final double kV = 0.0; // vlocity gain -> 0.123
+        public static final double kG = 2.0; // to overcome gravity
 
         // constraints
         public static final double kMinOutput = -1.0;
