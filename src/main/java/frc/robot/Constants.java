@@ -16,7 +16,7 @@ public final class Constants {
 
         // current limits (amps)
         public static final int kPivotCurrentLimit = 45; // Adjust if needed
-        public static final int kRollerCurrentLimit = 20;
+        public static final int kRollerCurrentLimit = 40;
 
         // PID
         public static final double kP = 0.0;

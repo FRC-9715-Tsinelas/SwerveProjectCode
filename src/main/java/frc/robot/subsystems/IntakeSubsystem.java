@@ -106,7 +106,7 @@ public class IntakeSubsystem extends SubsystemBase  {
     }
 
     public void setRollerSpeed(double speed) {
-        // currentPower = Math.max(-1.0, Math.min(1.0, speed));
+        currentPower = Math.max(-1.0, Math.min(1.0, speed));
         roller.set(speed);
     }
 
@@ -122,25 +122,22 @@ public class IntakeSubsystem extends SubsystemBase  {
     public void stop() {
         roller.set(0);
         pivot.set(0);
+        currentPower = 0;
     }
     
     @Override
     public void periodic() {
         double currentAngle = pivotEncoder.getPosition();
-        SmartDashboard.putNumber("Intake arm angle", currentAngle);
+        SmartDashboard.putNumber("Intake Arm Angle", currentAngle);
 
-        SmartDashboard.putNumber("Intake roller speed", currentPower);
+        SmartDashboard.putNumber("Intake Roller Speed", currentPower);
 
         SmartDashboard.putNumber("Intake Arm Angle", pivotAbsoluteEncoder.getPosition());
         SmartDashboard.putNumber("Intake velocity", pivotAbsoluteEncoder.getVelocity());
 
         SmartDashboard.putNumber("Intake check", pivot.getBusVoltage());
 
-        
-        //SmartDashboard.putBoolean("encoder conected", pivotAbsoluteEncoder.isConnected());
-        //SmartDashboard.putNumber("Intake Arm Angle", Math.random());
-
-        // double currentAngleRad = Units.degreesToRadians(pivotAbsoluteEncoder.getPosition());
+        // double currentAngleRad = Units.degreesToRadians(pivotEncoder.getPosition());
         // double ffVoltage = feedforward.calculate(currentAngleRad, 0);
 
         // double targetAngle = Math.min(Math.max(currentState.angleDegrees, IntakeConstants.kMinAngle), IntakeConstants.kMaxAngle);

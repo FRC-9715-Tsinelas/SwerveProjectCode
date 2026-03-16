@@ -175,7 +175,7 @@ public class RobotContainer {
 
         joystick.rightBumper().onTrue(
             new InstantCommand(() -> {
-                double nextSpeed = m_Intake.getCurrentPower() + 0.15;
+                double nextSpeed = m_Intake.getCurrentPower() + 0.05;
                 m_Intake.setRollerSpeed(nextSpeed);
             }));
 
