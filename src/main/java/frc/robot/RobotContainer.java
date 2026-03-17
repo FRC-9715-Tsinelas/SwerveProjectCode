@@ -145,7 +145,7 @@ public class RobotContainer {
         drivetrain.registerTelemetry(logger::telemeterize);
 
         // SHOOTER commands
-        // Up Key: Increase motor powers by 0.05 | Change when it's tuned
+        // Short distance shooting
         joystick.povUp().onTrue(
             new InstantCommand(() -> {
                 // System.out.println("up 1");
@@ -155,7 +155,7 @@ public class RobotContainer {
                 // m_Shooter.setShooterPower(nextLarge, nextSmall); 
                 m_Shooter.setShooterPower(0.55, 0.55); 
             }));
-        // Down Key: Decrease motor powers by 0.05 | Change when it's tuned
+        // Down Key: Increase motor powers by 0.05 | Change when it's tuned
         joystick.povDown().onTrue(
             new InstantCommand(() -> {
                 System.out.println("down 1");
@@ -174,6 +174,9 @@ public class RobotContainer {
         //INTAKE commands -> Uncomment when tuned
         joystick.rightBumper().whileTrue(m_Intake.runIntakeCommand(0.4));
 
+        //Intake in reverse rei was here - > also have to do a reverse for this
+        // joystick.().whileTrue(m_Intake.runIntakeCommand(0.4));
+
         // joystick.a().onTrue(
         //     new InstantCommand(() -> m_Intake.setAngle())
         // );
@@ -190,20 +193,14 @@ public class RobotContainer {
                 System.out.println("right pressed");
                 m_Intake.stop();
             }));
-        
-        // joystick.x().onTrue(
-        //     new InstantCommand(() -> {
-        //         m_Intake.runTestIntake(2);
-        //     }));
-
+        // Run pivot
         joystick.x().onTrue(
             m_Intake.startEnd(
                 () -> m_Intake.runTestIntake(0.5),
                 () -> m_Intake.stop()
             ).withTimeout(0.3));
 
-        // INDEXER commands -> set correct IDs
-        //joystick.y().onTrue(m_Indexer.toggleIndexer(1));
+        // INDEXER commands
         joystick.y().whileTrue(
             m_Indexer.runEnd(
                 () -> m_Indexer.setIndexerPower(0.6),

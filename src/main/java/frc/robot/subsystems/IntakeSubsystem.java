@@ -48,7 +48,6 @@ public class IntakeSubsystem extends SubsystemBase  {
         roller = new SparkMax(IntakeConstants.ROLLER_ID, MotorType.kBrushless);
         pivot = new SparkMax(IntakeConstants.PIVOT_ID, MotorType.kBrushless);
 
-        //pivotAbsoluteEncoder = pivot.getAbsoluteEncoder();
         pivotController = pivot.getClosedLoopController();
         pivotEncoder = pivot.getEncoder();
 
@@ -65,17 +64,10 @@ public class IntakeSubsystem extends SubsystemBase  {
 
         roller.configure(rollerConfig, com.revrobotics.ResetMode.kResetSafeParameters, com.revrobotics.PersistMode.kPersistParameters);
         
-        
-
         pivotConfig
             .smartCurrentLimit(IntakeConstants.kPivotCurrentLimit)
             .idleMode(IntakeConstants.kPivotIdleMode)
             .inverted(IntakeConstants.kPivotInverted);
-
-        // pivotConfig.absoluteEncoder
-        //     .positionConversionFactor(360.0)
-        //     .velocityConversionFactor(360.0 / 60.0)
-        //     .zeroOffset(IntakeConstants.kEncoderOffset);
 
         pivotConfig.encoder
             .positionConversionFactor(360.0 / 12.5)
@@ -122,10 +114,6 @@ public class IntakeSubsystem extends SubsystemBase  {
         pivot.set(speed);
     }
 
-    public void setTargetAngle(double targetAngle) {
-        double safeAngle = Math.min(Math.max(targetAngle, IntakeConstants.kMinAngle), IntakeConstants.kMaxAngle);
-    }
-
     public void stop() {
         roller.set(0);
         pivot.set(0);
@@ -145,70 +133,12 @@ public class IntakeSubsystem extends SubsystemBase  {
         System.out.println("applied");
     }
 
-    
-    
     @Override
     public void periodic() {
         double currentAngle = pivotEncoder.getPosition();
         SmartDashboard.putNumber("Intake Arm Angle", currentAngle);
 
         SmartDashboard.putNumber("Intake Roller Speed", currentPower);
-
-        // double testkG = 0.25;
-
-        // double currentAngleRad = Math.toRadians(pivotEncoder.getPosition());
-
-        // double outputVoltage = testkG * Math.cos(currentAngleRad);
-        // pivot.setVoltage(outputVoltage);
-
-        // p = SmartDashboard.getNumber("P Value", p);
-        // g = SmartDashboard.getNumber("G Value", g);
-
-        // double ffVoltage = feedforward.calculate(Math.toRadians(pivotEncoder.getPosition()), 0);
-        // pivotConfig.closedLoop.p(p);
-        // pivot.configure(pivotConfig, com.revrobotics.ResetMode.kResetSafeParameters, com.revrobotics.PersistMode.kPersistParameters);
-
-        // this.feedforward = new ArmFeedforward(0, g, 0);
-
-        // pivotController.setSetpoint(
-        //     0.0,
-        //     SparkMax.ControlType.kPosition,
-        //     com.revrobotics.spark.ClosedLoopSlot.kSlot0,
-        //     ffVoltage
-        // );
-        
-        // double newP = SmartDashboard.getNumber("P Value", p);
-        // double newG = SmartDashboard.getNumber("G Value", g);
-
-        
-        // if (newP != p || newG != g) {
-        //     p = newP;
-        //     g = newG;
-
-            
-        //     pivotConfig.closedLoop.p(p);
-        //     pivot.configure(pivotConfig, 
-        //         com.revrobotics.ResetMode.kNoResetSafeParameters, 
-        //         com.revrobotics.PersistMode.kNoPersistParameters);
-
-        //     // update
-        //     this.feedforward = new ArmFeedforward(IntakeConstants.kS, g, IntakeConstants.kV);
-        // }
-
-        // //
-        // double currentPosRad = Math.toRadians(pivotEncoder.getPosition());
-        // //currentPosRad = currentPosRad * -1;
-        // double ffVoltage = feedforward.calculate(currentPosRad, 0);
-
-        // pivotController.setSetpoint(
-        //     0.0, 
-        //     SparkMax.ControlType.kPosition,
-        //     com.revrobotics.spark.ClosedLoopSlot.kSlot0,
-        //     ffVoltage
-        // );
-
-        // SmartDashboard.putNumber("Intake Arm Angle", pivotAbsoluteEncoder.getPosition());
-        // SmartDashboard.putNumber("Intake velocity", pivotAbsoluteEncoder.getVelocity());
 
         double currentAngleRad = Units.degreesToRadians(pivotEncoder.getPosition());
         double ffVoltage = feedforward.calculate(currentAngleRad, 0);
