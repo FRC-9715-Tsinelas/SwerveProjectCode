@@ -98,7 +98,7 @@ public class IntakeSubsystem extends SubsystemBase  {
         
         pivot.configure(pivotConfig, com.revrobotics.ResetMode.kResetSafeParameters, com.revrobotics.PersistMode.kPersistParameters);
 
-        pivotEncoder.setPosition(0);
+        pivotEncoder.setPosition(95);
 
         SmartDashboard.putNumber("P Value", p);
         SmartDashboard.putNumber("G Value", g);
@@ -132,17 +132,17 @@ public class IntakeSubsystem extends SubsystemBase  {
         currentPower = 0;
     }
 
-    public void setAngle() {
-        double targetAngle = 0.0;
-
+    public void setAngle(double targetAngle) {
+        
         double ffVoltage = feedforward.calculate(Math.toRadians(pivotEncoder.getPosition()), 0);
-
+        System.out.println("set angle pressed");
         pivotController.setSetpoint(
             targetAngle,
             SparkMax.ControlType.kPosition,
             com.revrobotics.spark.ClosedLoopSlot.kSlot0,
             ffVoltage
         );
+        System.out.println("applied");
     }
 
     
@@ -220,7 +220,7 @@ public class IntakeSubsystem extends SubsystemBase  {
         //     com.revrobotics.spark.ClosedLoopSlot.kSlot0,
         //     ffVoltage
         // );
-        pivot.setVoltage(ffVoltage);
+        //pivot.setVoltage(ffVoltage);
     }
 
     public Command runIntakeCommand(double speed) {

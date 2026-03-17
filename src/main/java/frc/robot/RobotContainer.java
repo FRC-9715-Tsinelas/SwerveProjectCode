@@ -174,9 +174,9 @@ public class RobotContainer {
         //INTAKE commands -> Uncomment when tuned
         joystick.rightBumper().whileTrue(m_Intake.runIntakeCommand(0.4));
 
-        joystick.a().onTrue(
-            new InstantCommand(() -> m_Intake.setAngle())
-        );
+        // joystick.a().onTrue(
+        //     new InstantCommand(() -> m_Intake.setAngle())
+        // );
 
         // joystick.rightBumper().onTrue(
         //     new InstantCommand(() -> {

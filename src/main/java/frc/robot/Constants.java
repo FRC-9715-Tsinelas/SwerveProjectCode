@@ -10,7 +10,7 @@ public final class Constants {
 
         // General motor settings
         public static final boolean kRollerInverted = true; // Change if motor is moving wrong way
-        public static final boolean kPivotInverted = false; // Change if motor is moving wrong way
+        public static final boolean kPivotInverted = true; // Change if motor is moving wrong way
         public static final IdleMode kPivotIdleMode = IdleMode.kBrake;
         public static final IdleMode kRollerIdleMode = IdleMode.kCoast;
 
@@ -26,7 +26,7 @@ public final class Constants {
         // Feedforward
         public static final double kS = 0.0; // Voltage to overcome friction
         public static final double kV = 0.0; // vlocity gain -> 0.123
-        public static final double kG = 2.0; // to overcome gravity
+        public static final double kG = 0.5; // to overcome gravity
 
         // constraints
         public static final double kMinOutput = -1.0;

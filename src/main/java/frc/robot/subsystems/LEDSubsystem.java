@@ -26,7 +26,7 @@ public class LEDSubsystem extends SubsystemBase {
     public void setLights() {
         //m_candle.setControl(new SolidColor(0, 7).withColor(redColor));
         //m_candle.setControl(mRainbowAnimation);
-        m_candle.setControl(mFireAnimation);
+        m_candle.setControl(mRainbowAnimation);
     }
 
 }
