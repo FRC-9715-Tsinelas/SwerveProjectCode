@@ -33,12 +33,6 @@ import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 import frc.robot.generated.TunerConstants;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 
-// // candle
-// import com.ctre.phoenix6.CANBus;
-// import com.ctre.phoenix6.hardware.CANdle;
-// import com.ctre.phoenix6.signals.RGBWColor;
-// import com.ctre.phoenix6.controls.SolidColor;
-
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -51,11 +45,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private static final double kSimLoopPeriod = 0.004; // 4 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
-
-    // private final CANBus kCANBus = new CANBus("herbivore");
-    // private final CANdle m_candle = new CANdle(25, kCANBus);
-
-    // private static final RGBWColor kRed = new RGBWColor(255, 0, 0, 0);
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;

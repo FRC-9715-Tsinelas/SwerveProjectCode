@@ -108,12 +108,12 @@ public class RobotContainer {
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
         //m_LED.setDefaultCommand(m_LED.run(() -> m_LED.setRed()));
-        m_LED.setDefaultCommand(Commands.runOnce(m_LED::setLights, m_LED));
+        m_LED.setDefaultCommand(Commands.run(m_LED::setLights, m_LED));
 
         // Idle command
-        m_Shooter.setDefaultCommand(
-            m_Shooter.run(() -> m_Shooter.setShooterPower(0.35, 0.35))
-        );
+        // m_Shooter.setDefaultCommand(
+        //     m_Shooter.run(() -> m_Shooter.setShooterPower(0.35, 0.35))
+        // );
     }
 
     private void configureBindings() {
@@ -163,11 +163,10 @@ public class RobotContainer {
         //         m_Shooter.setShooterPower(0.55, 0.55); 
         //     }));
 
-        joystick.povUp().toggleOnTrue(
+        joystick.povUp().onTrue(
                 Commands.parallel(
-                    m_Shooter.runOnce(() -> m_Shooter.setShooterPower(0.55, 0.55)),
-                    m_Indexer.runOnce(() -> m_Indexer.runIndexer(0.6)
-                )
+                    m_Shooter.runOnce(() -> m_Shooter.setShooterPower(0.55, 0.55))
+                    // m_Intake.runOnce(() -> m_Intake.runIntake(0.6)
                 )
             );
         // Down Key -> Increase motor power by 5%
@@ -189,11 +188,6 @@ public class RobotContainer {
         //INTAKE commands -> Uncomment when tuned
         joystick.rightBumper().whileTrue(
             m_Intake.runIntakeCommand(0.4)
-                .alongWith(
-                    m_Indexer.runEnd(
-                        () -> m_Indexer.setIndexerPower(0.6),
-                        () -> m_Indexer.stopIndexer()
-                ))
         );
 
         // Intake in reverse rei was here - > also have to do a reverse for this
@@ -214,6 +208,10 @@ public class RobotContainer {
             Commands.runOnce(() -> {
                 System.out.println("right pressed");
                 m_Intake.stop();
+                // m_Intake.runEnd(
+                //     () -> m_Intake.runIntakeCommand(-0.4),
+                //     m_Intake::stop
+                // )
             }));
 
         // X -> Drop pivot down
@@ -231,10 +229,32 @@ public class RobotContainer {
         //         () -> m_Indexer.setIndexerPower(0.6),
         //         () -> m_Indexer.stopIndexer()
         //     ));
-        joystick.y().toggleOnTrue(
-            m_Indexer.run(() -> m_Indexer.setIndexerPower(0.6)
-        ));
+        // joystick.y().toggleOnTrue(
+        //     m_Indexer.startEnd(
+        //         () -> m_Indexer.setIndexerPower(0.6), 
+        //         () -> m_Indexer.setIndexerPower(0)
+        //     )
+        // );
 
+        joystick.y().toggleOnTrue(
+            Commands.sequence(
+                // forward
+                Commands.parallel(
+                    m_Indexer.run(() -> m_Indexer.setIndexerPower(0.6)),
+                    m_Intake.run(() -> m_Intake.setRollerSpeed(0.1))
+                ).withTimeout(0.67),
+                // backward
+                Commands.parallel(
+                    m_Indexer.run(() -> m_Indexer.setIndexerPower(0.6)),
+                    m_Intake.run(() -> m_Intake.setRollerSpeed(-0.1))
+                ).withTimeout(0.67)
+            )
+            .repeatedly()
+            .finallyDo((interrupted) -> {
+                m_Indexer.stopIndexer();
+                m_Intake.stop();
+            })
+        );
         // joystick.b().onTrue(
         //     new InstantCommand(() -> {
         //         // System.out.println("b pressed");

@@ -10,13 +10,13 @@ public final class Constants {
 
         // General motor settings
         public static final boolean kRollerInverted = true; // Change if motor is moving wrong way
-        public static final boolean kPivotInverted = true; // Change if motor is moving wrong way
+        public static final boolean kPivotInverted = false; // Change if motor is moving wrong way
         public static final IdleMode kPivotIdleMode = IdleMode.kBrake;
         public static final IdleMode kRollerIdleMode = IdleMode.kCoast;
 
         // current limits (amps)
         public static final int kPivotCurrentLimit = 45; // Adjust if needed
-        public static final int kRollerCurrentLimit = 40;
+        public static final int kRollerCurrentLimit = 69;
 
         // PID
         public static final double kP = 0.0;

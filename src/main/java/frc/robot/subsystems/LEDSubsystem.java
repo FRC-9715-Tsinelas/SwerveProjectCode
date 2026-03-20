@@ -13,10 +13,11 @@ public class LEDSubsystem extends SubsystemBase {
     private final CANBus kCanBus = new CANBus("Herbivore");
     private final CANdle m_candle = new CANdle(25, kCanBus);
 
-    private static final RGBWColor redColor = new RGBWColor(255, 0, 0,0);
+    //private static final RGBWColor redColor = new RGBWColor(255, 0, 0,0);
+    private static final RGBWColor greenColor = new RGBWColor(0, 255, 0,0);
 
-    private final RainbowAnimation mRainbowAnimation = new RainbowAnimation(0, 7);
-    private final FireAnimation mFireAnimation = new FireAnimation(0, 7);
+    //private final RainbowAnimation mRainbowAnimation = new RainbowAnimation(0, 7);
+    //private final FireAnimation mFireAnimation = new FireAnimation(0, 7);
 
     public LEDSubsystem() {
         CANdleConfiguration config = new CANdleConfiguration();
@@ -25,8 +26,9 @@ public class LEDSubsystem extends SubsystemBase {
 
     public void setLights() {
         //m_candle.setControl(new SolidColor(0, 7).withColor(redColor));
+        m_candle.setControl(new SolidColor(0, 7).withColor(greenColor));
         //m_candle.setControl(mRainbowAnimation);
-        m_candle.setControl(mRainbowAnimation);
+        //m_candle.setControl(mRainbowAnimation);
     }
 
 }

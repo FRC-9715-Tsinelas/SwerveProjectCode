@@ -123,18 +123,18 @@ public class IntakeSubsystem extends SubsystemBase  {
         pivotPower = 0;
     }
 
-    public void setAngle(double targetAngle) {
+    // public void setAngle(double targetAngle) {
         
-        double ffVoltage = feedforward.calculate(Math.toRadians(pivotEncoder.getPosition()), 0);
-        System.out.println("set angle pressed");
-        pivotController.setSetpoint(
-            targetAngle,
-            SparkMax.ControlType.kPosition,
-            com.revrobotics.spark.ClosedLoopSlot.kSlot0,
-            ffVoltage
-        );
-        System.out.println("applied");
-    }
+    //     double ffVoltage = feedforward.calculate(Math.toRadians(pivotEncoder.getPosition()), 0);
+    //     System.out.println("set angle pressed");
+    //     pivotController.setSetpoint(
+    //         targetAngle,
+    //         SparkMax.ControlType.kPosition,
+    //         com.revrobotics.spark.ClosedLoopSlot.kSlot0,
+    //         ffVoltage
+    //     );
+    //     System.out.println("applied");
+    // }
 
     @Override
     public void periodic() {
@@ -144,9 +144,9 @@ public class IntakeSubsystem extends SubsystemBase  {
         SmartDashboard.putNumber("Intake Roller Speed", currentPower);
 
         double currentAngleRad = Units.degreesToRadians(pivotEncoder.getPosition());
-        double ffVoltage = feedforward.calculate(currentAngleRad, 0);
+        // double ffVoltage = feedforward.calculate(currentAngleRad, 0);
 
-        double targetAngle = Math.min(Math.max(currentState.angleDegrees, IntakeConstants.kMinAngle), IntakeConstants.kMaxAngle);
+        // double targetAngle = Math.min(Math.max(currentState.angleDegrees, IntakeConstants.kMinAngle), IntakeConstants.kMaxAngle);
         // pivotController.setSetpoint(
         //     0, 
         //     SparkMax.ControlType.kPosition,
