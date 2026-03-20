@@ -9,7 +9,11 @@ import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.utility.WheelForceCalculator.Feedforwards;
 import com.ctre.phoenix6.swerve.SwerveRequest;
-
+// Path Planner Imports
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -105,6 +109,11 @@ public class RobotContainer {
 
         //m_LED.setDefaultCommand(m_LED.run(() -> m_LED.setRed()));
         m_LED.setDefaultCommand(Commands.runOnce(m_LED::setLights, m_LED));
+
+        // Idle command
+        m_Shooter.setDefaultCommand(
+            m_Shooter.run(() -> m_Shooter.setShooterPower(0.35, 0.35))
+        );
     }
 
     private void configureBindings() {
@@ -149,13 +158,21 @@ public class RobotContainer {
         // SHOOTER commands
 
         // Up Key -> Short Distance Shooting
-        joystick.povUp().onTrue(
-            new InstantCommand(() -> {
-                m_Shooter.setShooterPower(0.55, 0.55); 
-            }));
+        // joystick.povUp().onTrue(
+        //     new InstantCommand(() -> {
+        //         m_Shooter.setShooterPower(0.55, 0.55); 
+        //     }));
+
+        joystick.povUp().toggleOnTrue(
+                Commands.parallel(
+                    m_Shooter.runOnce(() -> m_Shooter.setShooterPower(0.55, 0.55)),
+                    m_Indexer.runOnce(() -> m_Indexer.runIndexer(0.6)
+                )
+                )
+            );
         // Down Key -> Increase motor power by 5%
         joystick.povDown().onTrue(
-            new InstantCommand(() -> {
+            Commands.runOnce(() -> {
                 System.out.println("down 1");
                 double nextLarge = m_Shooter.getLargePower() + 0.05;
                 double nextSmall = m_Shooter.getSmallPower() + 0.05;
@@ -164,13 +181,20 @@ public class RobotContainer {
             }));
         // Left Key -> Stop shooter
         joystick.povLeft().onTrue(
-            new InstantCommand(() -> {
+            Commands.runOnce(() -> {
                 System.out.println("left pressed");
                 m_Shooter.stop();
             }));
 
         //INTAKE commands -> Uncomment when tuned
-        joystick.rightBumper().whileTrue(m_Intake.runIntakeCommand(0.4));
+        joystick.rightBumper().whileTrue(
+            m_Intake.runIntakeCommand(0.4)
+                .alongWith(
+                    m_Indexer.runEnd(
+                        () -> m_Indexer.setIndexerPower(0.6),
+                        () -> m_Indexer.stopIndexer()
+                ))
+        );
 
         // Intake in reverse rei was here - > also have to do a reverse for this
          //joystick.().whileTrue(m_Intake.runIntakeCommand(0.4));
@@ -184,27 +208,32 @@ public class RobotContainer {
         //         double nextSpeed = m_Intake.getCurrentPower() + 0.05;
         //         m_Intake.setRollerSpeed(nextSpeed);
         //     }));
+        
         // Right Key -> Stop intake
         joystick.povRight().onTrue(
-            new InstantCommand(() -> {
+            Commands.runOnce(() -> {
                 System.out.println("right pressed");
                 m_Intake.stop();
             }));
+
         // X -> Drop pivot down
         joystick.x().onTrue(
             m_Intake.startEnd(
-                () -> m_Intake.runTestIntake(0.5),
+                () -> m_Intake.runTestIntake(0.6),
                 () -> m_Intake.stop()
             ).withTimeout(0.3));
 
         // INDEXER commands
 
         // Y -> Run indexer
-        joystick.y().whileTrue(
-            m_Indexer.runEnd(
-                () -> m_Indexer.setIndexerPower(0.6),
-                () -> m_Indexer.stopIndexer()
-            ));
+        // joystick.y().whileTrue(
+        //     m_Indexer.runEnd(
+        //         () -> m_Indexer.setIndexerPower(0.6),
+        //         () -> m_Indexer.stopIndexer()
+        //     ));
+        joystick.y().toggleOnTrue(
+            m_Indexer.run(() -> m_Indexer.setIndexerPower(0.6)
+        ));
 
         // joystick.b().onTrue(
         //     new InstantCommand(() -> {

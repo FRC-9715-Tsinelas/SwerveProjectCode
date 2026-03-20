@@ -14,6 +14,7 @@ public class IndexerSubsystem extends SubsystemBase {
 
     private final SparkMax indexerMotor;
     private final SparkMaxConfig indexerConfig;
+    private final SparkMaxConfig config = new SparkMaxConfig();
 
     private boolean isRunning = false;
     public double currentPower = 0.0;
@@ -72,6 +73,6 @@ public class IndexerSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putBoolean("Indexer Running", isRunning);
-        SmartDashboard.putNumber("Indexer Output", indexerMotor.getAppliedOutput());
+        SmartDashboard.putNumber("Indexer ", indexerMotor.getAppliedOutput()); 
     }
 }
