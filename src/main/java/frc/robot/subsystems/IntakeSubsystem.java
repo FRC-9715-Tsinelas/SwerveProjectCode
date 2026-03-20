@@ -37,6 +37,7 @@ public class IntakeSubsystem extends SubsystemBase  {
     private IntakeState currentState = IntakeState.STOWED;
 
     public double currentPower = 0.0;
+    public double pivotPower = 0.0;
 
     double p = 0.0;
     double g = 0.0;
@@ -51,11 +52,11 @@ public class IntakeSubsystem extends SubsystemBase  {
         pivotController = pivot.getClosedLoopController();
         pivotEncoder = pivot.getEncoder();
 
-        feedforward = new ArmFeedforward(
-            IntakeConstants.kS, 
-            IntakeConstants.kG,
-            IntakeConstants.kV 
-        );
+        // feedforward = new ArmFeedforward(
+        //     IntakeConstants.kS, 
+        //     IntakeConstants.kG,
+        //     IntakeConstants.kV 
+        // );
         // roller config
         SparkMaxConfig rollerConfig = new SparkMaxConfig();
         rollerConfig
@@ -73,11 +74,11 @@ public class IntakeSubsystem extends SubsystemBase  {
             .positionConversionFactor(360.0 / 12.5)
             .velocityConversionFactor(360.0 / 12.5 / 60);
 
-        pivotConfig.softLimit
-            .forwardSoftLimit(95)
-            .reverseSoftLimit(-5.0)
-            .forwardSoftLimitEnabled(true)
-            .reverseSoftLimitEnabled(true);
+        // pivotConfig.softLimit
+        //     .forwardSoftLimit(95)
+        //     .reverseSoftLimit(-5.0)
+        //     .forwardSoftLimitEnabled(true)
+        //     .reverseSoftLimitEnabled(true);
         
         pivotConfig.closedLoop
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder);
@@ -106,18 +107,20 @@ public class IntakeSubsystem extends SubsystemBase  {
 
     public void setRollerSpeed(double speed) {
         currentPower = Math.max(-1.0, Math.min(1.0, speed));
-        roller.set(speed);
+        roller.set(currentPower); // changed from speed
     }
 
     public void runTestIntake(double speed) {
-        //currentPower = Math.max(-1.0, Math.min(1.0, speed));
-        pivot.set(speed);
+        System.out.println("x pressed");
+        pivotPower = Math.max(-1.0, Math.min(1.0, speed));
+        pivot.set(pivotPower); // changed from speed
     }
 
     public void stop() {
         roller.set(0);
         pivot.set(0);
         currentPower = 0;
+        pivotPower = 0;
     }
 
     public void setAngle(double targetAngle) {

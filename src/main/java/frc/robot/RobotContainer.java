@@ -144,18 +144,16 @@ public class RobotContainer {
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
+        // BUTTON BINDINGS
+
         // SHOOTER commands
-        // Short distance shooting
+
+        // Up Key -> Short Distance Shooting
         joystick.povUp().onTrue(
             new InstantCommand(() -> {
-                // System.out.println("up 1");
-                // double nextLarge = m_Shooter.getLargePower() + 0.05;
-                // double nextSmall = m_Shooter.getSmallPower() + 0.05;
-                // System.out.println("up 2");
-                // m_Shooter.setShooterPower(nextLarge, nextSmall); 
                 m_Shooter.setShooterPower(0.55, 0.55); 
             }));
-        // Down Key: Increase motor powers by 0.05 | Change when it's tuned
+        // Down Key -> Increase motor power by 5%
         joystick.povDown().onTrue(
             new InstantCommand(() -> {
                 System.out.println("down 1");
@@ -164,7 +162,7 @@ public class RobotContainer {
                 System.out.println("down 2");
                 m_Shooter.setShooterPower(nextLarge, nextSmall); 
             }));
-        // Left Key: Stop everything
+        // Left Key -> Stop shooter
         joystick.povLeft().onTrue(
             new InstantCommand(() -> {
                 System.out.println("left pressed");
@@ -174,8 +172,8 @@ public class RobotContainer {
         //INTAKE commands -> Uncomment when tuned
         joystick.rightBumper().whileTrue(m_Intake.runIntakeCommand(0.4));
 
-        //Intake in reverse rei was here - > also have to do a reverse for this
-        // joystick.().whileTrue(m_Intake.runIntakeCommand(0.4));
+        // Intake in reverse rei was here - > also have to do a reverse for this
+         //joystick.().whileTrue(m_Intake.runIntakeCommand(0.4));
 
         // joystick.a().onTrue(
         //     new InstantCommand(() -> m_Intake.setAngle())
@@ -186,14 +184,13 @@ public class RobotContainer {
         //         double nextSpeed = m_Intake.getCurrentPower() + 0.05;
         //         m_Intake.setRollerSpeed(nextSpeed);
         //     }));
-
-
+        // Right Key -> Stop intake
         joystick.povRight().onTrue(
             new InstantCommand(() -> {
                 System.out.println("right pressed");
                 m_Intake.stop();
             }));
-        // Run pivot
+        // X -> Drop pivot down
         joystick.x().onTrue(
             m_Intake.startEnd(
                 () -> m_Intake.runTestIntake(0.5),
@@ -201,18 +198,13 @@ public class RobotContainer {
             ).withTimeout(0.3));
 
         // INDEXER commands
+
+        // Y -> Run indexer
         joystick.y().whileTrue(
             m_Indexer.runEnd(
                 () -> m_Indexer.setIndexerPower(0.6),
                 () -> m_Indexer.stopIndexer()
             ));
-
-        // joystick.y().onTrue(
-        //     new InstantCommand(() -> {
-        //         System.out.println("indexer up");
-        //         double nextSpeed = m_Indexer.getCurrentPower() + 0.05;
-        //         m_Indexer.setIndexerPower(nextSpeed); 
-        //     }));
 
         // joystick.b().onTrue(
         //     new InstantCommand(() -> {
