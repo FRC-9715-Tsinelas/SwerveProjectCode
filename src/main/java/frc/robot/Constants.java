@@ -5,8 +5,8 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 public final class Constants {
     public static class IntakeConstants {
         // Motor IDs
-        public static final int PIVOT_ID = 5; // Change to correct ID
-        public static final int ROLLER_ID = 6; // Change to correct ID
+        public static final int PIVOT_ID = 5; // ID is good
+        public static final int ROLLER_ID = 6; // ID is good
 
         // General motor settings
         public static final boolean kRollerInverted = true; // Change if motor is moving wrong way
@@ -15,8 +15,8 @@ public final class Constants {
         public static final IdleMode kRollerIdleMode = IdleMode.kCoast;
 
         // current limits (amps)
-        public static final int kPivotCurrentLimit = 45; // Adjust if needed
-        public static final int kRollerCurrentLimit = 69;
+        public static final int kPivotCurrentLimit = 67; // Adjust if needed
+        public static final int kRollerCurrentLimit = 40;
 
         // PID
         public static final double kP = 0.0;

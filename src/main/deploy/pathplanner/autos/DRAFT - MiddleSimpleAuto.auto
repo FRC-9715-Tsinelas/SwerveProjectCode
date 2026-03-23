@@ -5,63 +5,26 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "LeftStart0"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Shoot"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "RunIndexer"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "DropIntake"
-          }
-        },
-        {
-          "type": "parallel",
+          "type": "race",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "LeftStart1"
+                  "pathName": "MiddleDrivePath0"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakeBalls"
+                  "name": "IdleShoot"
                 }
               }
             ]
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "parallel",
+          "type": "race",
           "data": {
             "commands": [
               {
@@ -74,6 +37,31 @@
                 "type": "named",
                 "data": {
                   "name": "RunIndexer"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 5.0
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "MiddleDrivePath1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IdleShoot"
                 }
               }
             ]

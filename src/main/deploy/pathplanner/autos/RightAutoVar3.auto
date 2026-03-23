@@ -5,65 +5,53 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "LeftStart0"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Shoot"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "RunIndexer"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "DropIntake"
-          }
-        },
-        {
-          "type": "parallel",
+          "type": "race",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "LeftStart1"
+                  "pathName": "Right3.0"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakeBalls"
+                  "name": "IdleShoot"
                 }
               }
             ]
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "Shoot"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Right3.1"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 10.0
+                }
+              }
+            ]
           }
         },
         {
-          "type": "parallel",
+          "type": "race",
           "data": {
             "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunIndexer"
+                }
+              },
               {
                 "type": "named",
                 "data": {
@@ -71,9 +59,9 @@
                 }
               },
               {
-                "type": "named",
+                "type": "wait",
                 "data": {
-                  "name": "RunIndexer"
+                  "waitTime": 15.0
                 }
               }
             ]
@@ -83,6 +71,6 @@
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Variations",
   "choreoAuto": false
 }

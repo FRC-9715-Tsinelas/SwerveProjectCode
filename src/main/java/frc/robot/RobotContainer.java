@@ -7,10 +7,12 @@ package frc.robot;
 import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveRequest.ForwardPerspectiveValue;
 import com.ctre.phoenix6.swerve.utility.WheelForceCalculator.Feedforwards;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 // Path Planner Imports
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
@@ -102,6 +104,24 @@ public class RobotContainer {
     public RobotContainer() {
         configureBindings();
 
+        NamedCommands.registerCommand("DropIntake",  m_Intake.startEnd(
+                () -> m_Intake.runTestIntake(0.6),
+                () -> m_Intake.stop()
+            ).withTimeout(0.3));
+        NamedCommands.registerCommand("Shoot", Commands.runOnce(() -> {
+            System.out.println("shooting");
+            m_Shooter.setShooterPower(0.55, 0.55); 
+        }));
+        NamedCommands.registerCommand("IntakeBalls", m_Intake.runIntakeCommand(0.4));
+        NamedCommands.registerCommand("RunIndexer", m_Indexer.runEnd(
+                () -> m_Indexer.setIndexerPower(0.6),
+                () -> m_Indexer.stopIndexer()
+            ));
+        NamedCommands.registerCommand("IdleShoot", Commands.runOnce(() -> {
+            System.out.println("shooting");
+            m_Shooter.setShooterPower(0.35, 0.35); 
+        })); 
+
         // path planner
         configurePathPlanner();
         autoChooser = AutoBuilder.buildAutoChooser();
@@ -114,7 +134,15 @@ public class RobotContainer {
         // m_Shooter.setDefaultCommand(
         //     m_Shooter.run(() -> m_Shooter.setShooterPower(0.35, 0.35))
         // );
+        
     }
+
+    // public Command shootCommand() {
+    //     Commands.runOnce(() -> {
+    //         System.out.println("shooting");
+    //         m_Shooter.setShooterPower(0.55, 0.55); 
+    //     });
+    // }
 
     private void configureBindings() {
         // Note that X is defined as forward according to WPILib convention,
@@ -124,7 +152,7 @@ public class RobotContainer {
             drivetrain.applyRequest(() ->
                 drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
                     .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+                    .withRotationalRate(-joystick.getRightX() * MaxAngularRate).withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective) // Drive counterclockwise with negative X (left)
             )
         );
 
@@ -135,7 +163,7 @@ public class RobotContainer {
             drivetrain.applyRequest(() -> idle).ignoringDisable(true)
         );
         // pressing a brakes drivetrain like stop moving
-        // joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
+        joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
         // it looks like pressing b points all the modules to wherever the left joystick is facing
         // joystick.b().whileTrue(drivetrain.applyRequest(() ->
         //     point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
@@ -208,18 +236,14 @@ public class RobotContainer {
             Commands.runOnce(() -> {
                 System.out.println("right pressed");
                 m_Intake.stop();
-                // m_Intake.runEnd(
-                //     () -> m_Intake.runIntakeCommand(-0.4),
-                //     m_Intake::stop
-                // )
             }));
 
         // X -> Drop pivot down
-        joystick.x().onTrue(
-            m_Intake.startEnd(
-                () -> m_Intake.runTestIntake(0.6),
-                () -> m_Intake.stop()
-            ).withTimeout(0.3));
+        // joystick.x().onTrue(
+        //     m_Intake.startEnd(
+        //         () -> m_Intake.runTestIntake(0.6),
+        //         () -> m_Intake.stop()
+        //     ).withTimeout(0.3));
 
         // INDEXER commands
 
@@ -242,12 +266,12 @@ public class RobotContainer {
                 Commands.parallel(
                     m_Indexer.run(() -> m_Indexer.setIndexerPower(0.6)),
                     m_Intake.run(() -> m_Intake.setRollerSpeed(0.1))
-                ).withTimeout(0.67),
+                ).withTimeout(0.6),
                 // backward
                 Commands.parallel(
                     m_Indexer.run(() -> m_Indexer.setIndexerPower(0.6)),
                     m_Intake.run(() -> m_Intake.setRollerSpeed(-0.1))
-                ).withTimeout(0.67)
+                ).withTimeout(0.6)
             )
             .repeatedly()
             .finallyDo((interrupted) -> {
@@ -263,11 +287,32 @@ public class RobotContainer {
         //         double nextSpeed = m_Indexer.getCurrentPower() - 0.05;
         //         m_Indexer.setIndexerPower(nextSpeed); 
         //     }));
+        joystick.b().whileTrue(
+            m_Intake.runIntakeCommand(-0.4)
+        );
 
+    }
+
+    public Command getMiddleAuto() {
+        return Commands.sequence(
+            drivetrain.runOnce(() -> drivetrain.seedFieldCentric(new Rotation2d(0))),
+            drivetrain.applyRequest(() -> 
+            drive.withVelocityX(0.5)
+            .withVelocityY(0))
+        ).withTimeout(5.0);
     }
 
     public Command getAutonomousCommand() {
         return autoChooser.getSelected();
+        // return Commands.parallel(
+        //             m_Indexer.run(() -> m_Indexer.setIndexerPower(0.6)),
+        //             m_Shooter.run(() -> m_Shooter.setShooterPower(1, 1)),
+        //             m_Intake.run(() -> m_Intake.setRollerSpeed(0.4))
+        //         ).withTimeout(15);
+        // return m_Intake.startEnd(
+        //         () -> m_Intake.runTestIntake(0.6),
+        //         () -> m_Intake.stop()
+        //     ).withTimeout(0.6);
         // Simple drive forward auton
         // final var idle = new SwerveRequest.Idle();
         // return Commands.sequence(

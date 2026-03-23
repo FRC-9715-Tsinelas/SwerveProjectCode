@@ -29,13 +29,13 @@
 		<location x="86" y="103"/>
 	</widget>
 	<widget field="Indexer Output" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="387" y="195"/>
+		<location x="335" y="20"/>
 	</widget>
 	<widget field="Indexer Running" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="385" y="166"/>
+		<location x="380" y="139"/>
 	</widget>
 	<widget field="Auto Chooser" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
-		<location x="413" y="253"/>
+		<location x="380" y="166"/>
 	</widget>
 	<widget field="Intake Arm Angle" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="85" y="75"/>
